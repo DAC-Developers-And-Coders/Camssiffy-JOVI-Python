@@ -1,0 +1,21 @@
+=== TEXTO ===
+
+
+=== LABELS ===
+Smile
+Happiness
+Lips
+Beauty
+Facial expression
+Long hair
+Tooth
+Portrait photography
+Laughter
+Portrait
+
+=== OBJETOS ===
+Person
+Clothing
+
+=== SCORE ===
+{'Estudo': 0, 'Pessoal': 3, 'Pet': 0, 'Trabalho': 0, 'Outros': 0}

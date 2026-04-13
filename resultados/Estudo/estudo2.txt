@@ -1,0 +1,57 @@
+=== TEXTO ===
+hanne
+Alto Falante da TV
+entrada;
+da
+dores
+xtinguir
+'
+: - Verificar se Vx e Vy estarão dentro dos limites.
+-Interessante Rg não
+passar
+de 10kΩ
+Resistor R pode ser de 100K ♫ (até IMR)
+VONE
+VOFF
+Comparador de Tensão com Histerese
+w
+RF
+Vo
+VH
+Ri
+V₁
+VON: tensão
+para acionar a saída (quando for main
+- VOFF: tensão para "desligar" a saída (quando for menor
+-VH: tensão na saída quando ativado.
+- VL: tensão na saída quando desativado
+-Rf: escolher a partir de 100K
+-Lembre-se: geralmente V₁ = Vcc - 1,4. Já VL de
+pende da alimentação e do AO utilizado.
+VH
+I VIN
+Uref
+R
+RF (VON-VOFF)
+Uref
+VON-VL Rf+ Ve
+R. Rf
+VH-VL
+VON
+-VOFF
+
+=== LABELS ===
+Handwriting
+Diagram
+Number
+Paper Product
+Office supplies
+Triangle
+Writing
+Science
+
+=== OBJETOS ===
+
+
+=== SCORE ===
+{'Estudo': 2, 'Pessoal': 0, 'Pet': 0, 'Trabalho': 0, 'Outros': 0}

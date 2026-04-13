@@ -1,0 +1,27 @@
+=== TEXTO ===
+
+
+=== LABELS ===
+Dog
+White
+Vertebrate
+Carnivores
+Snout
+Puppy
+Toy dog
+Canidae
+Working animal
+Ancient dog breeds
+
+=== OBJETOS ===
+Dog
+Dog
+Animal
+Animal
+Animal
+Dog
+Animal
+Animal
+
+=== SCORE ===
+{'Estudo': 0, 'Pessoal': 0, 'Pet': 4, 'Trabalho': 0, 'Outros': 0}

@@ -1,0 +1,23 @@
+=== TEXTO ===
+
+
+=== LABELS ===
+Smile
+Happiness
+Black hair
+Monochrome photography
+Beauty
+Facial expression
+Tooth
+Blazer
+Black and white
+Formal wear
+
+=== OBJETOS ===
+Person
+Outerwear
+Coat
+Clothing
+
+=== SCORE ===
+{'Estudo': 0, 'Pessoal': 1, 'Pet': 0, 'Trabalho': 0, 'Outros': 0}
