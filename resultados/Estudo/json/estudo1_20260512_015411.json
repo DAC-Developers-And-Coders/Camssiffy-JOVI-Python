@@ -1,0 +1,31 @@
+{
+    "texto": "4/2026\nSA todos\nAmplificador de Instrumentação\nV1\nVx\nRF\nR\nRg\nRF\nV2\nVy\n+\nR\nR\nVo\nAv = (2.Rf + 1) / Rg\nVo = Av . (V1 - V2)\n! - Resolve problemas de impedância de entrada;\n- Alteração de ganho de forma facilitada\n- Dicas para menores enfurecimentos, dores\nde cabeça ou mesmo querer se extinguir\nVx = (V1-V2) . (Rf / Rg) + V1\nVy = V2 - (Rf / Rg) . (V1-V2)\nVx <= Vcc - 1,4\nVy >= -Vcc + 1,4\n- Se V1 = V2, Vx = Vy = V1 = V2\n- Verificar se Vx e Vy estarão dentro dos limites\n- Interessante Rg não passar de 10kΩ\n- Resistor R pode ser de 100kΩ (até 1MΩ)\nComparador de Tensão com RF\nVON\nVOFF\nRi\nRF\nUref\nVH\nVL\nRi = RF (VON - VOFF) / (VH - VL)",
+    "descricao": "A imagem exibe um quadro branco em um ambiente de sala de aula, preenchido com anotações manuscritas e diagramas técnicos. O quadro contém esquemas de circuitos eletrônicos, como um 'Amplificador de Instrumentação' e um 'Comparador de Tensão com RF', acompanhados de fórmulas e bullet points com características e observações. À direita, a parte de trás da cabeça e ombro de uma pessoa, vestindo uma camiseta vinho, está visível, parcialmente obscurecendo o texto. No canto inferior esquerdo, parte da cabeça de outra pessoa, usando um capuz azul, pode ser vista. A iluminação é clara e a escrita é legível, sugerindo um contexto educacional.",
+    "categoria": "Estudo",
+    "plano_estudos": {
+        "assunto": "Amplificadores Operacionais e Circuitos Integrados",
+        "nivel": "Intermediário",
+        "topicos": [
+            "Revisão dos Princípios dos Amplificadores Operacionais (Op-Amps)",
+            "Amplificador de Instrumentação: estrutura, funcionamento, derivação da equação de ganho (Av)",
+            "Análise das tensões Vx e Vy no amplificador de instrumentação e seus limites de operação",
+            "Considerações de projeto para amplificadores de instrumentação (impedância de entrada, escolha de resistores Rg e R)",
+            "Comparador de Tensão com Histerese (Schmitt Trigger): conceito, derivação das equações para pontos de disparo (VON, VOFF) e níveis de saída (VH, VL)",
+            "Cálculo de componentes (Ri, RF) para comparadores com histerese e suas aplicações"
+        ],
+        "exercicios": [
+            "Projetar um amplificador de instrumentação para um ganho diferencial específico, considerando os limites de tensão de entrada e saída.",
+            "Analisar um circuito de amplificador de instrumentação existente para determinar seu ganho, as tensões internas (Vx, Vy) e verificar sua operação dentro dos limites.",
+            "Projetar um comparador de tensão com histerese (Schmitt Trigger) para pontos de disparo de tensão de subida (VON) e descida (VOFF) e níveis de saída (VH, VL) definidos.",
+            "Utilizar simuladores de circuito para testar os projetos e analisar o comportamento dos amplificadores e comparadores."
+        ],
+        "tempo_estimado": "10 a 15 horas",
+        "dicas": [
+            "Comece revisando os fundamentos dos amplificadores operacionais (realimentação negativa, ganho de laço aberto, impedâncias).",
+            "Preste atenção aos requisitos de projeto, como impedância de entrada e faixa de operação das tensões Vx e Vy, para evitar saturação.",
+            "Use um caderno para derivar as fórmulas passo a passo e entender cada componente da equação.",
+            "Experimente com diferentes valores de resistores em simuladores para visualizar o impacto no ganho e na histerese.",
+            "Conecte a teoria com aplicações práticas, pensando em onde esses circuitos são usados na eletrônica."
+        ]
+    }
+}

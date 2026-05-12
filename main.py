@@ -1,6 +1,9 @@
 import os
 import json
 import time
+import shutil
+
+from datetime import datetime
 
 from preprocess import preprocessar_imagem
 from ocr import analisar_imagem
@@ -24,25 +27,105 @@ for arquivo in os.listdir(PASTA_IMAGENS):
 
     try:
 
+        # Preprocessa imagem
         imagem_processada = preprocessar_imagem(
             caminho_imagem
         )
 
+        # Analisa imagem
         dados = analisar_imagem(
             imagem_processada
         )
 
-        nome_json = os.path.splitext(
-            arquivo
-        )[0] + ".json"
-
-        caminho_json = os.path.join(
-            PASTA_RESULTADOS,
-            nome_json
+        categoria = dados.get(
+            "categoria",
+            "Outros"
         )
 
+        categoria = categoria.strip()
+
+        # Pastas
+        pasta_categoria = os.path.join(
+            PASTA_RESULTADOS,
+            categoria
+        )
+
+        pasta_originais = os.path.join(
+            pasta_categoria,
+            "originais"
+        )
+
+        pasta_melhoradas = os.path.join(
+            pasta_categoria,
+            "melhoradas"
+        )
+
+        pasta_json = os.path.join(
+            pasta_categoria,
+            "json"
+        )
+
+        os.makedirs(
+            pasta_originais,
+            exist_ok=True
+        )
+
+        os.makedirs(
+            pasta_melhoradas,
+            exist_ok=True
+        )
+
+        os.makedirs(
+            pasta_json,
+            exist_ok=True
+        )
+
+        # Timestamp
+        timestamp = datetime.now().strftime(
+            "%Y%m%d_%H%M%S"
+        )
+
+        nome_base = (
+            os.path.splitext(arquivo)[0]
+            + "_"
+            + timestamp
+        )
+
+        extensao = os.path.splitext(
+            arquivo
+        )[1]
+
+        # Caminhos finais
+        imagem_original_destino = os.path.join(
+            pasta_originais,
+            nome_base + extensao
+        )
+
+        imagem_melhorada_destino = os.path.join(
+            pasta_melhoradas,
+            nome_base + extensao
+        )
+
+        json_destino = os.path.join(
+            pasta_json,
+            nome_base + ".json"
+        )
+
+        # Copia imagem original
+        shutil.copy2(
+            caminho_imagem,
+            imagem_original_destino
+        )
+
+        # Copia imagem preprocessada
+        shutil.copy2(
+            imagem_processada,
+            imagem_melhorada_destino
+        )
+
+        # Salva JSON
         with open(
-            caminho_json,
+            json_destino,
             "w",
             encoding="utf-8"
         ) as f:
@@ -54,9 +137,25 @@ for arquivo in os.listdir(PASTA_IMAGENS):
                 indent=4
             )
 
-        print("Resultado salvo")
+        print(
+            f"Categoria: {categoria}"
+        )
 
-        time.sleep(8)
+        print(
+            f"Original: {imagem_original_destino}"
+        )
+
+        print(
+            f"Melhorada: {imagem_melhorada_destino}"
+        )
+
+        print(
+            f"JSON: {json_destino}"
+        )
+
+        os.remove(imagem_processada)
+        
+        time.sleep(10)
 
     except Exception as erro:
 

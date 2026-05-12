@@ -1,34 +1,59 @@
 import cv2
 import os
+import numpy as np
 
-PASTA_TEMP = "resultados"
+PASTA_TEMP = "temp"
+
+os.makedirs(
+    PASTA_TEMP,
+    exist_ok=True
+)
 
 
 def preprocessar_imagem(caminho):
 
     imagem = cv2.imread(caminho)
 
+    # Aumenta resolução
     imagem = cv2.resize(
         imagem,
-        (1280, 720)
+        None,
+        fx=1.5,
+        fy=1.5,
+        interpolation=cv2.INTER_CUBIC
     )
 
-    cinza = cv2.cvtColor(
+    # Redução leve de ruído
+    imagem = cv2.fastNlMeansDenoisingColored(
         imagem,
-        cv2.COLOR_BGR2GRAY
+        None,
+        5,
+        5,
+        7,
+        21
     )
 
-    suavizada = cv2.GaussianBlur(
-        cinza,
-        (5, 5),
-        0
+    # Brilho e contraste
+    alpha = 1.15
+    beta = 8
+
+    imagem = cv2.convertScaleAbs(
+        imagem,
+        alpha=alpha,
+        beta=beta
     )
 
-    _, threshold = cv2.threshold(
-        suavizada,
-        0,
-        255,
-        cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    # Nitidez
+    kernel = np.array([
+        [0, -1, 0],
+        [-1, 5, -1],
+        [0, -1, 0]
+    ])
+
+    imagem = cv2.filter2D(
+        imagem,
+        -1,
+        kernel
     )
 
     nome = os.path.basename(caminho)
@@ -40,7 +65,7 @@ def preprocessar_imagem(caminho):
 
     cv2.imwrite(
         saida,
-        threshold
+        imagem
     )
 
     return saida
