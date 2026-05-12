@@ -1,22 +1,46 @@
 import cv2
 import os
 
-def preprocessar(path, salvar=True):
-    img = cv2.imread(path)
+PASTA_TEMP = "resultados"
 
-    if img is None:
-        raise ValueError("Erro ao carregar imagem")
-       
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    blur = cv2.GaussianBlur(gray, (3,3), 0)
+def preprocessar_imagem(caminho):
 
-    contrast = cv2.convertScaleAbs(blur, alpha=1.3, beta=10)
-    
-    final = cv2.cvtColor(contrast, cv2.COLOR_GRAY2BGR)
+    imagem = cv2.imread(caminho)
 
-    if salvar:
-        os.makedirs('resultados', exist_ok=True)
-        cv2.imwrite('resultados/debug.jpg', final)
+    imagem = cv2.resize(
+        imagem,
+        (1280, 720)
+    )
 
-    return final
+    cinza = cv2.cvtColor(
+        imagem,
+        cv2.COLOR_BGR2GRAY
+    )
+
+    suavizada = cv2.GaussianBlur(
+        cinza,
+        (5, 5),
+        0
+    )
+
+    _, threshold = cv2.threshold(
+        suavizada,
+        0,
+        255,
+        cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    )
+
+    nome = os.path.basename(caminho)
+
+    saida = os.path.join(
+        PASTA_TEMP,
+        f"prep_{nome}"
+    )
+
+    cv2.imwrite(
+        saida,
+        threshold
+    )
+
+    return saida
