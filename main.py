@@ -14,9 +14,11 @@ from ocr import analisar_imagem
 PASTA_IMAGENS = "./imagens_iniciais"
 PASTA_RESULTADOS = "./resultados"
 
+# Função que limpa o terminal
 def limpar_terminal():
     os.system("cls" if os.name == "nt" else "clear")
 
+# Função que encerra execução do programa ao usuário selecionar tecla 'e'
 def encerrar():
     keyboard.wait("e")
 
@@ -24,10 +26,12 @@ def encerrar():
     sys.stdout.flush()
     os._exit(0)
 
+# Função que inicia thread executada paralelamente ao sistema, aguardando a seleção da tecla 'e'
 def iniciar_thread():
     print("Sistema iniciado\nPressione 'E' para encerrar.")
     threading.Thread(target=encerrar, daemon=True).start()
 
+# Função que gerencia o processamento de imagens
 def processar_arquivo(arquivo, caminho_imagem):
     try:
         # Preprocessa imagem
@@ -51,7 +55,7 @@ def processar_arquivo(arquivo, caminho_imagem):
 
         categoria = categoria.strip()
 
-        # Pastas
+        # Criação/Seleção de pastas
         pasta_categoria = os.path.join(
             PASTA_RESULTADOS,
             categoria
@@ -201,6 +205,7 @@ def processar_arquivo(arquivo, caminho_imagem):
         print(f"Erro: {erro}")
 
 
+# Função que inicia o processamento de todas as imagens do diretório
 def iniciar_processamento_geral():
     iniciar_thread()
 
@@ -218,6 +223,7 @@ def iniciar_processamento_geral():
 
     print("\nProcessamento finalizado")
 
+# Função que inicia o processamento de uma imagem específica do diretório
 def iniciar_processamento_unico(nome_arquivo):
     iniciar_thread()
 
@@ -228,6 +234,8 @@ def iniciar_processamento_unico(nome_arquivo):
 
     if not os.path.isfile(caminho_imagem):
         print("Arquivo Não Encontrado")
+        for _ in range(30):
+            time.sleep(0.1)
         return
 
     print(f"\nProcessando: {nome_arquivo}")
@@ -235,6 +243,7 @@ def iniciar_processamento_unico(nome_arquivo):
 
     print("\nProcessamento finalizado")
 
+# Função que inicia o menu inicial do sistema
 def menu_inicial():
     while True:
         print("\n===SPRINT 2 - Sistema de melhoria, identificação e organização de fotos===")
@@ -253,13 +262,15 @@ def menu_inicial():
             case 1:
                 limpar_terminal()
                 iniciar_processamento_geral()
-                break
+                limpar_terminal()
+                continue
             case 2:
                 print(f"Digite o nome do arquivo da imagem no formato 'nome_arquivo.extensao' (a imagem deve estar na pasta {PASTA_IMAGENS[2:]}):")
                 nome_arquivo = str(input())
                 limpar_terminal()
                 iniciar_processamento_unico(nome_arquivo)
-                break
+                limpar_terminal()
+                continue
             case 3:
                 limpar_terminal()
                 print("Sistema encerrado.")
@@ -269,6 +280,5 @@ def menu_inicial():
                 print("Opção inválida. Tente novamente.")
                 limpar_terminal()
                 continue
-
 
 menu_inicial()

@@ -9,7 +9,7 @@ os.makedirs(
     exist_ok=True
 )
 
-
+# Função que melhora qualidade de imagens
 def preprocessar_imagem(caminho):
 
     imagem = cv2.imread(caminho)

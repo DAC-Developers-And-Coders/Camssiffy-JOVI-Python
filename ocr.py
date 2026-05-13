@@ -7,15 +7,17 @@ import json
 import re
 import os
 
+# Carrega as variáveis de ambiente
 load_dotenv()
 
+# Cria o cliente Gemini utilizando a chave da API armazenada no .env
 client = genai.Client(
     api_key=os.getenv(
         "GEMINI_API_KEY"
     )
 )
 
-
+# Função responsável por limpar retorno feito pela IA
 def limpar_json(texto):
 
     texto = texto.strip()
@@ -28,11 +30,12 @@ def limpar_json(texto):
 
     return texto
 
-
+# Função responsável por analisar imagens
 def analisar_imagem(path):
 
     imagem = Image.open(path)
 
+    # Define o prompt enviado para o Gemini
     prompt = """
     Analise cuidadosamente essa imagem.
 
@@ -84,6 +87,7 @@ def analisar_imagem(path):
     "plano_estudos": null
     """
 
+    # Envia imagem e prompt ao Gemini e coleta a resposta
     resposta = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=[
@@ -99,6 +103,7 @@ def analisar_imagem(path):
         resposta.text
     )
 
+    # Converte JSON para um dicinário
     dados = json.loads(
         texto_limpo
     )
