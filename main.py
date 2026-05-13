@@ -11,8 +11,11 @@ from datetime import datetime
 from preprocess import preprocessar_imagem
 from ocr import analisar_imagem
 
-PASTA_IMAGENS = "imagens_teste"
-PASTA_RESULTADOS = "resultados"
+PASTA_IMAGENS = "./imagens_iniciais"
+PASTA_RESULTADOS = "./resultados"
+
+def limpar_terminal():
+    os.system("cls" if os.name == "nt" else "clear")
 
 def encerrar():
     keyboard.wait("e")
@@ -21,21 +24,11 @@ def encerrar():
     sys.stdout.flush()
     os._exit(0)
 
-print("Sistema iniciado\nPressione 'E' para encerrar.")
+def iniciar_thread():
+    print("Sistema iniciado\nPressione 'E' para encerrar.")
+    threading.Thread(target=encerrar, daemon=True).start()
 
-threading.Thread(target=encerrar, daemon=True).start()
-
-for arquivo in os.listdir(PASTA_IMAGENS):
-    caminho_imagem = os.path.join(
-        PASTA_IMAGENS,
-        arquivo
-    )
-
-    if not os.path.isfile(caminho_imagem):
-        continue
-
-    print(f"\nProcessando: {arquivo}")
-
+def processar_arquivo(arquivo, caminho_imagem):
     try:
         # Preprocessa imagem
         imagem_processada = preprocessar_imagem(
@@ -50,6 +43,10 @@ for arquivo in os.listdir(PASTA_IMAGENS):
         categoria = dados.get(
             "categoria",
             "Outros"
+        )
+
+        plano_de_estudos = dados.get(
+            "plano_estudos"
         )
 
         categoria = categoria.strip()
@@ -75,6 +72,11 @@ for arquivo in os.listdir(PASTA_IMAGENS):
             "json"
         )
 
+        pasta_plano_de_estudos = os.path.join(
+            pasta_categoria,
+            "planos_de_estudos"
+        )
+
         os.makedirs(
             pasta_originais,
             exist_ok=True
@@ -90,15 +92,20 @@ for arquivo in os.listdir(PASTA_IMAGENS):
             exist_ok=True
         )
 
+        os.makedirs(
+            pasta_plano_de_estudos,
+            exist_ok=True
+        )
+
         # Timestamp
         timestamp = datetime.now().strftime(
             "%Y%m%d_%H%M%S"
         )
 
         nome_base = (
-            os.path.splitext(arquivo)[0]
-            + "_"
-            + timestamp
+                categoria.lower()
+                + "_"
+                + timestamp
         )
 
         extensao = os.path.splitext(
@@ -121,6 +128,11 @@ for arquivo in os.listdir(PASTA_IMAGENS):
             nome_base + ".json"
         )
 
+        plano_de_estudos_destino = os.path.join(
+            pasta_plano_de_estudos,
+            nome_base + ".txt"
+        )
+
         # Copia imagem original
         shutil.copy2(
             caminho_imagem,
@@ -135,9 +147,9 @@ for arquivo in os.listdir(PASTA_IMAGENS):
 
         # Salva JSON
         with open(
-            json_destino,
-            "w",
-            encoding="utf-8"
+                json_destino,
+                "w",
+                encoding="utf-8"
         ) as f:
 
             json.dump(
@@ -147,29 +159,116 @@ for arquivo in os.listdir(PASTA_IMAGENS):
                 indent=4
             )
 
+        with open(
+            plano_de_estudos_destino,
+            "w",
+            encoding="utf-8"
+        ) as f:
+            f.write(
+                json.dumps(
+                    plano_de_estudos,
+                    ensure_ascii=False,
+                    indent=4
+                )
+            )
+
         print(
             f"Categoria: {categoria}"
         )
 
         print(
-            f"Original: {imagem_original_destino}"
+            f"Original: {imagem_original_destino[2:]}"
         )
 
         print(
-            f"Melhorada: {imagem_melhorada_destino}"
+            f"Melhorada: {imagem_melhorada_destino[2:]}"
         )
 
         print(
-            f"JSON: {json_destino}"
+            f"JSON: {json_destino[2:]}"
+        )
+
+        print(
+            f"Plano de estudos: {plano_de_estudos_destino[2:]}"
         )
 
         os.remove(imagem_processada)
 
-        for _ in range(100):
+        for _ in range(50):
             time.sleep(0.1)
 
     except Exception as erro:
-
         print(f"Erro: {erro}")
 
-print("Processamento finalizado")
+
+def iniciar_processamento_geral():
+    iniciar_thread()
+
+    for arquivo in os.listdir(PASTA_IMAGENS):
+        caminho_imagem = os.path.join(
+            PASTA_IMAGENS,
+            arquivo
+        )
+
+        if not os.path.isfile(caminho_imagem):
+            continue
+
+        print(f"\nProcessando: {arquivo}")
+        processar_arquivo(arquivo, caminho_imagem)
+
+    print("\nProcessamento finalizado")
+
+def iniciar_processamento_unico(nome_arquivo):
+    iniciar_thread()
+
+    caminho_imagem = os.path.join(
+        PASTA_IMAGENS,
+        nome_arquivo
+    )
+
+    if not os.path.isfile(caminho_imagem):
+        print("Arquivo Não Encontrado")
+        return
+
+    print(f"\nProcessando: {nome_arquivo}")
+    processar_arquivo(nome_arquivo, caminho_imagem)
+
+    print("\nProcessamento finalizado")
+
+def menu_inicial():
+    while True:
+        print("\n===SPRINT 2 - Sistema de melhoria, identificação e organização de fotos===")
+        print(f"| 1 - Iniciar processamento geral da pasta {PASTA_IMAGENS[2:]}")
+        print("| 2 - Iniciar processamento de imagem específica")
+        print("| 3 - Sair\n")
+
+        opcao = input()
+
+        if not opcao.isnumeric():
+            print("Opção inválida. Tente novamente.")
+            limpar_terminal()
+            continue
+
+        match int(opcao):
+            case 1:
+                limpar_terminal()
+                iniciar_processamento_geral()
+                break
+            case 2:
+                print(f"Digite o nome do arquivo da imagem no formato 'nome_arquivo.extensao' (a imagem deve estar na pasta {PASTA_IMAGENS[2:]}):")
+                nome_arquivo = str(input())
+                limpar_terminal()
+                iniciar_processamento_unico(nome_arquivo)
+                break
+            case 3:
+                limpar_terminal()
+                print("Sistema encerrado.")
+                sys.stdout.flush()
+                os._exit(0)
+            case _:
+                print("Opção inválida. Tente novamente.")
+                limpar_terminal()
+                continue
+
+
+menu_inicial()
