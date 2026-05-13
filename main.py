@@ -1,7 +1,10 @@
 import os
-import json
+import sys
 import time
+import json
 import shutil
+import keyboard
+import threading
 
 from datetime import datetime
 
@@ -11,10 +14,18 @@ from ocr import analisar_imagem
 PASTA_IMAGENS = "imagens_teste"
 PASTA_RESULTADOS = "resultados"
 
-print("Sistema iniciado")
+def encerrar():
+    keyboard.wait("e")
+
+    print("Sistema encerrado.")
+    sys.stdout.flush()
+    os._exit(0)
+
+print("Sistema iniciado\nPressione 'E' para encerrar.")
+
+threading.Thread(target=encerrar, daemon=True).start()
 
 for arquivo in os.listdir(PASTA_IMAGENS):
-
     caminho_imagem = os.path.join(
         PASTA_IMAGENS,
         arquivo
@@ -26,7 +37,6 @@ for arquivo in os.listdir(PASTA_IMAGENS):
     print(f"\nProcessando: {arquivo}")
 
     try:
-
         # Preprocessa imagem
         imagem_processada = preprocessar_imagem(
             caminho_imagem
@@ -154,9 +164,12 @@ for arquivo in os.listdir(PASTA_IMAGENS):
         )
 
         os.remove(imagem_processada)
-        
-        time.sleep(10)
+
+        for _ in range(100):
+            time.sleep(0.1)
 
     except Exception as erro:
 
         print(f"Erro: {erro}")
+
+print("Processamento finalizado")
