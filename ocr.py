@@ -48,7 +48,7 @@ def analisar_imagem(path):
     Categorias:
     - Estudo
     - Trabalho
-    - Pessoal
+    - Pessoa
     - Pet
     - Outros
 

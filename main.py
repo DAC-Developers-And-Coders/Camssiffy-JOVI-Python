@@ -76,10 +76,18 @@ def processar_arquivo(arquivo, caminho_imagem):
             "json"
         )
 
-        pasta_plano_de_estudos = os.path.join(
-            pasta_categoria,
-            "planos_de_estudos"
-        )
+        if plano_de_estudos is not None:
+            pasta_plano_de_estudos = os.path.join(
+                pasta_categoria,
+                "planos_de_estudos"
+            )
+
+            os.makedirs(
+                pasta_plano_de_estudos,
+                exist_ok=True
+            )
+        else:
+            pasta_plano_de_estudos = None
 
         os.makedirs(
             pasta_originais,
@@ -93,11 +101,6 @@ def processar_arquivo(arquivo, caminho_imagem):
 
         os.makedirs(
             pasta_json,
-            exist_ok=True
-        )
-
-        os.makedirs(
-            pasta_plano_de_estudos,
             exist_ok=True
         )
 
@@ -132,10 +135,13 @@ def processar_arquivo(arquivo, caminho_imagem):
             nome_base + ".json"
         )
 
-        plano_de_estudos_destino = os.path.join(
-            pasta_plano_de_estudos,
-            nome_base + ".txt"
-        )
+        if pasta_plano_de_estudos is not None:
+            plano_de_estudos_destino = os.path.join(
+                pasta_plano_de_estudos,
+                nome_base + ".txt"
+            )
+        else:
+            plano_de_estudos_destino = None
 
         # Copia imagem original
         shutil.copy2(
@@ -163,18 +169,19 @@ def processar_arquivo(arquivo, caminho_imagem):
                 indent=4
             )
 
-        with open(
-            plano_de_estudos_destino,
-            "w",
-            encoding="utf-8"
-        ) as f:
-            f.write(
-                json.dumps(
-                    plano_de_estudos,
-                    ensure_ascii=False,
-                    indent=4
+        if plano_de_estudos_destino is not None:
+            with open(
+                plano_de_estudos_destino,
+                "w",
+                encoding="utf-8"
+            ) as f:
+                f.write(
+                    json.dumps(
+                        plano_de_estudos,
+                        ensure_ascii=False,
+                        indent=4
+                    )
                 )
-            )
 
         print(
             f"Categoria: {categoria}"
@@ -192,9 +199,10 @@ def processar_arquivo(arquivo, caminho_imagem):
             f"JSON: {json_destino[2:]}"
         )
 
-        print(
-            f"Plano de estudos: {plano_de_estudos_destino[2:]}"
-        )
+        if plano_de_estudos_destino is not None:
+            print(
+                f"Plano de estudos: {plano_de_estudos_destino[2:]}"
+            )
 
         os.remove(imagem_processada)
 
