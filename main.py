@@ -3,8 +3,6 @@ import sys
 import time
 import json
 import shutil
-import keyboard
-import threading
 
 from datetime import datetime
 
@@ -17,19 +15,6 @@ PASTA_RESULTADOS = "./resultados"
 # Função que limpa o terminal
 def limpar_terminal():
     os.system("cls" if os.name == "nt" else "clear")
-
-# Função que encerra execução do programa ao usuário selecionar tecla 'e'
-def encerrar():
-    keyboard.wait("e")
-
-    print("Sistema encerrado.")
-    sys.stdout.flush()
-    os._exit(0)
-
-# Função que inicia thread executada paralelamente ao sistema, aguardando a seleção da tecla 'e'
-def iniciar_thread():
-    print("Sistema iniciado\nPressione 'E' para encerrar.")
-    threading.Thread(target=encerrar, daemon=True).start()
 
 # Função que gerencia o processamento de imagens
 def processar_arquivo(arquivo, caminho_imagem):
@@ -208,14 +193,16 @@ def processar_arquivo(arquivo, caminho_imagem):
 
         for _ in range(50):
             time.sleep(0.1)
-
+    #Envia a interrupção pelo CTRL + C
+    except KeyboardInterrupt:
+        raise
     except Exception as erro:
         print(f"Erro: {erro}")
 
 
 # Função que inicia o processamento de todas as imagens do diretório
 def iniciar_processamento_geral():
-    iniciar_thread()
+    print("Sistema iniciado\nUse CTRL+C para encerrar\n")
 
     for arquivo in os.listdir(PASTA_IMAGENS):
         caminho_imagem = os.path.join(
@@ -233,7 +220,7 @@ def iniciar_processamento_geral():
 
 # Função que inicia o processamento de uma imagem específica do diretório
 def iniciar_processamento_unico(nome_arquivo):
-    iniciar_thread()
+    print("Sistema iniciado\nUse CTRL+C para encerrar\n")
 
     caminho_imagem = os.path.join(
         PASTA_IMAGENS,
@@ -289,4 +276,9 @@ def menu_inicial():
                 limpar_terminal()
                 continue
 
-menu_inicial()
+try:
+    menu_inicial()
+#Recebe a interrupção pelo CTRL + C e encerra imediatamente o programa
+except KeyboardInterrupt:
+    print("\nSistema encerrado.")
+    os._exit(0)
