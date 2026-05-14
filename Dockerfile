@@ -25,6 +25,6 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
-RUN mkdir -p imagens_teste resultados
+RUN mkdir -p imagens_iniciais resultados
 
 CMD ["python", "main.py"]
