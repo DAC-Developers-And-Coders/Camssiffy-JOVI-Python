@@ -1,0 +1,33 @@
+{
+    "texto": "F(x) = ax² + bx + c\n1) Concavidade:\na > 0 U\na < 0 ∩\n2) Raíz: Valores onde o gráfico cruza o eixo x.\nΔ = b² - 4.a.c (x² - (soma)x + (produto))\n→ onde corta o Y\n-b ± √Δ\n2a\n3) Vértice: ponto mais alto ou mais baixo da parábola.\nXv = -b / 2a\nYv = -Δ / 4a\nEx. 1) f(x) = x² - 2x - 3\nΔ = 4 - 4.1.(-3)\nΔ = 4 + 12\nΔ = 16\nx1 = (2 + 4) / 2 = 3\nx2 = (2 - 4) / 2 = -1\nYv = -16 / 4 = -4\n2) f(x) = x² + 2x + 4\nΔ = 4 - 4.1.4\nΔ = 4 - 16\nΔ = -12\nXv = -2 / 2 = -1\nYv = -(-12) / 4 = 12 / 4 = 3",
+    "descricao": "A imagem mostra anotações manuscritas em uma folha de caderno pautada sobre o tema de funções quadráticas (parábolas). Inclui a forma geral da função (F(x) = ax² + bx + c), explicações sobre concavidade, raízes e vértices, com suas respectivas fórmulas. Dois exemplos detalhados são apresentados, contendo cálculos do discriminante (Δ), raízes (para o primeiro exemplo) e coordenadas do vértice (Xv, Yv), acompanhados de esboços simples dos gráficos das parábolas.",
+    "categoria": "Estudo",
+    "plano_estudos": {
+        "assunto": "Funções Quadráticas (Parábolas)",
+        "nivel": "Ensino Médio / Pré-vestibular",
+        "topicos": [
+            "Definição e elementos da função quadrática (coeficientes a, b, c)",
+            "Análise da concavidade da parábola (a > 0 ou a < 0)",
+            "Cálculo das raízes (zeros da função) - Fórmula de Bhaskara",
+            "Interpretação geométrica das raízes (pontos de intersecção com o eixo x)",
+            "Cálculo das coordenadas do vértice (Xv e Yv)",
+            "Significado do vértice (ponto de máximo ou mínimo da parábola)",
+            "Ponto de intersecção com o eixo y (valor de 'c')",
+            "Análise do discriminante (delta) e sua relação com o número de raízes reais",
+            "Esboço de gráficos de parábolas com base nos pontos notáveis"
+        ],
+        "exercicios": [
+            "Resolver diferentes funções quadráticas para encontrar a concavidade, raízes e vértices.",
+            "Construir o gráfico de funções quadráticas dadas, identificando os pontos de intersecção e o vértice.",
+            "Analisar o discriminante de funções quadráticas e prever o número de raízes reais.",
+            "Resolver problemas que envolvam a aplicação de funções quadráticas para otimização (máximo/mínimo)."
+        ],
+        "tempo_estimado": "4-6 horas",
+        "dicas": [
+            "Pratique a dedução e a memorização das fórmulas do vértice e do discriminante.",
+            "Associe cada componente da função (a, b, c) e do discriminante (Δ) com sua representação gráfica.",
+            "Utilize ferramentas gráficas (como GeoGebra) para visualizar as parábolas e confirmar seus cálculos.",
+            "Revise os conceitos de equações do 2º grau e propriedades de potências e raízes antes de aprofundar nas funções."
+        ]
+    }
+}
