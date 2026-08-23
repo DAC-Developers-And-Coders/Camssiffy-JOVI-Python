@@ -20,7 +20,7 @@ class Preprocess:
 
     # Função que inicia o processamento de uma imagem específica do diretório
     def iniciar_processamento_unico(self, nome_arquivo, PASTA_IMAGENS):
-        print("Sistema iniciado\nUse CTRL+C para encerrar\n")
+        print("Sistema iniciado\nUse CTRL+C para interromper\n")
 
         caminho_imagem = os.path.join(
             PASTA_IMAGENS,
@@ -102,11 +102,6 @@ class Preprocess:
                 name
             )
 
-            '''pasta_originais = os.path.join(
-                pasta_categoria,
-                "originais"
-            )'''
-
             pasta_melhoradas = os.path.join(
                 pasta_categoria,
                 "melhoradas"
@@ -129,11 +124,6 @@ class Preprocess:
                 )
             else:
                 pasta_plano_de_estudos = None
-
-            '''os.makedirs(
-                pasta_originais,
-                exist_ok=True
-            )'''
 
             os.makedirs(
                 pasta_melhoradas,
@@ -161,10 +151,7 @@ class Preprocess:
             )[1]
 
             # Caminhos finais
-            '''imagem_original_destino = os.path.join(
-                pasta_originais,
-                nome_base + extensao
-            )'''
+            imagem_original_destino = None
 
             imagem_melhorada_destino = os.path.join(
                 pasta_melhoradas,
@@ -183,12 +170,6 @@ class Preprocess:
                 )
             else:
                 plano_de_estudos_destino = None
-
-            # Copia imagem original
-            '''shutil.copy2(
-                caminho_imagem,
-                imagem_original_destino
-            )'''
 
             # Copia imagem preprocessada
             shutil.copy2(
@@ -224,9 +205,31 @@ class Preprocess:
                         )
                     )
 
+            #Salva imagem original, se não for de estudos
+            if categoria != "Estudo":
+                pasta_originais = os.path.join(
+                    pasta_categoria,
+                    "originais"
+                )
+
+                os.makedirs(
+                    pasta_originais,
+                    exist_ok=True
+                )
+
+                imagem_original_destino = os.path.join(
+                    pasta_originais,
+                    nome_base + extensao
+                )
+
+                shutil.copy2(
+                    caminho_imagem,
+                    imagem_original_destino
+                )
+
             print(f"\nCategoria: {categoria}")
             if tag_selecionada : print(f"Tag: {tag_selecionada}")
-            #print(f"Original: {imagem_original_destino[2:]}")
+            if imagem_original_destino : print(f"Original: {imagem_original_destino[2:]}")
             print(f"Melhorada: {imagem_melhorada_destino[2:]}")
             print(f"JSON: {json_destino[2:]}")
 
@@ -310,12 +313,19 @@ class Preprocess:
             for i in range(len(tags)):
                 print(f"[{i + 1}] {tags[i]}")
 
+        print("\nCaso deseje inserir uma tag manualmente, digite '0'.")
+
         while True:
             try:
                 escolha = int(input())
 
                 if 1 <= escolha <= len(tags):
                     tag_selecionada = tags[escolha - 1]
+                    break
+                elif escolha == 0:
+                    tag_selecionada = input("\nDigite a tag desejada: ")
+
+                    print(f"\nTag escolhida: {tag_selecionada}\nSalvamento concluído.")
                     break
 
                 print("\nOpção inválida. Tente novamente:")

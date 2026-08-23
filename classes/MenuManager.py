@@ -6,8 +6,8 @@ from classes.Preprocess import Preprocess
 class MenuManager:
     PASTA_IMAGENS = "./imagens_iniciais"
 
-    menu_string = ("\n===SPRINT 2 - Sistema de melhoria, identificação e organização de fotos==="
-                   "\nDEFAULT TAG: \n"
+    menu_string = ("\n===CAMSSIFY & JOVI - Sistema de melhoria, identificação e organização de fotos==="
+                   "\n| DEFAULT TAG: \n|"
                    "\n| [1] - Tutorial inicial de uso"
                    "\n| [2] - Selecionar modo de salvamento"
                    "\n| [3] - Utilizar última tag"
@@ -23,10 +23,13 @@ class MenuManager:
         os.system("cls" if os.name == "nt" else "clear")
 
     def __init__(self):
+        self.limpar_terminal()
+
         self.preprocess = Preprocess()
         self.iniciar_menu_inicial()
 
     def iniciar_menu_inicial(self):
+        #Checa se o sistema foi encerrado pelo comando CTRL+C
         try:
             self.menu_inicial()
         except KeyboardInterrupt:
@@ -47,7 +50,7 @@ class MenuManager:
             match int(opcao):
                 case 6:
                     self.limpar_terminal()
-                    self.preprocess.iniciar_processamento_geral(self.PASTA_IMAGENS)
+                    self.gerenciar_processamento("", False)
                     self.limpar_terminal()
                     continue
                 case 7:
@@ -55,7 +58,8 @@ class MenuManager:
                         f"Digite o nome do arquivo da imagem no formato 'nome_arquivo.extensao' (a imagem deve estar na pasta {self.PASTA_IMAGENS[2:]}):")
                     nome_arquivo = str(input())
                     self.limpar_terminal()
-                    self.preprocess.iniciar_processamento_unico(nome_arquivo, self.PASTA_IMAGENS)
+
+                    self.gerenciar_processamento(nome_arquivo)
                     self.limpar_terminal()
                     continue
                 case 8:
@@ -67,3 +71,13 @@ class MenuManager:
                     print("Opção inválida. Tente novamente.")
                     self.limpar_terminal()
                     continue
+
+    def gerenciar_processamento(self, nome_arquivo, unico=True):
+        try:
+            if unico:
+                self.preprocess.iniciar_processamento_unico(nome_arquivo, self.PASTA_IMAGENS)
+                self.limpar_terminal()
+            else:
+                self.preprocess.iniciar_processamento_geral(self.PASTA_IMAGENS)
+        except KeyboardInterrupt:
+            print("\nProcessamento interrompido.")
