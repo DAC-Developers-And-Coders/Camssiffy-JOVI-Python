@@ -6,6 +6,16 @@ from classes.Preprocess import Preprocess
 class MenuManager:
     PASTA_IMAGENS = "./imagens_iniciais"
 
+    menu_string = ("\n===SPRINT 2 - Sistema de melhoria, identificação e organização de fotos==="
+                   "\nDEFAULT TAG: \n"
+                   "\n| [1] - Tutorial inicial de uso"
+                   "\n| [2] - Selecionar modo de salvamento"
+                   "\n| [3] - Utilizar última tag"
+                   "\n| [4] - Criar nova tag"
+                   "\n| [5] - Selecionar DEFAULT TAG para múltiplas fotos"
+                   f"\n| [6] - Iniciar processamento geral da pasta {PASTA_IMAGENS[2:]}"
+                   "\n| [7] - Iniciar processamento de imagem específica"
+                   "\n| [8] - Sair\n")
     preprocess = None
 
     @staticmethod
@@ -25,10 +35,7 @@ class MenuManager:
 
     def menu_inicial(self):
         while True:
-            print("\n===SPRINT 2 - Sistema de melhoria, identificação e organização de fotos===")
-            print(f"| 1 - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}")
-            print("| 2 - Iniciar processamento de imagem específica")
-            print("| 3 - Sair\n")
+            print(self.menu_string)
 
             opcao = input()
 
@@ -38,12 +45,12 @@ class MenuManager:
                 continue
 
             match int(opcao):
-                case 1:
+                case 6:
                     self.limpar_terminal()
                     self.preprocess.iniciar_processamento_geral(self.PASTA_IMAGENS)
                     self.limpar_terminal()
                     continue
-                case 2:
+                case 7:
                     print(
                         f"Digite o nome do arquivo da imagem no formato 'nome_arquivo.extensao' (a imagem deve estar na pasta {self.PASTA_IMAGENS[2:]}):")
                     nome_arquivo = str(input())
@@ -51,7 +58,7 @@ class MenuManager:
                     self.preprocess.iniciar_processamento_unico(nome_arquivo, self.PASTA_IMAGENS)
                     self.limpar_terminal()
                     continue
-                case 3:
+                case 8:
                     self.limpar_terminal()
                     print("Sistema encerrado.")
                     sys.stdout.flush()

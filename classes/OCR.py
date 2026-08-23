@@ -40,25 +40,45 @@ class OCR:
 
         # Define o prompt enviado para o Gemini
         prompt = """
-        Analise cuidadosamente essa imagem.
+        Analise cuidadosamente a imagem fornecida.
     
-        Você deve:
+        Sua tarefa é:
     
-        1. Extrair TODO o texto visível
-        2. Descrever a imagem
-        3. Classificar a imagem
+        1. EXTRAÇÃO DE TEXTO
+        - Extraia todo o texto que estiver visível e legível na imagem.
+        - Preserve o conteúdo e a ordem do texto da forma mais fiel possível.
+        - Não invente ou complete palavras que não estejam legíveis.
+        
+        2. DESCRIÇÃO DA IMAGEM
+        - Descreva objetivamente o conteúdo visual da imagem.
+        - Não faça suposições desnecessárias sobre elementos que não podem ser identificados.
+        
+        3. CLASSIFICAÇÃO
+        Classifique a imagem em EXATAMENTE UMA das seguintes categorias:
     
-        Categorias:
-        - Estudo
-        - Trabalho
-        - Pessoa
-        - Pet
-        - Outros
+        - "Estudo"
+        - "Pessoa"
+        - "Pet"
+        - "Outros"
+        
+        4. TAGS
+        - Se a categoria for "Estudo", gere APENAS 4 tags relevantes para a imagem.
+        - As tags devem representar a matéria, assunto ou conteúdo identificado.
+        - Se não for "Estudo", "tags" deve ser null.
+        - As tags devem ser curtas e relevantes.
     
-        IMPORTANTE:
-    
-        Se for categoria "Estudo",
-        gere um plano de estudos resumido.
+        5. PLANO DE ESTUDOS
+        - Identifique o assunto principal com base no conteúdo da imagem.
+        - Gere um plano de estudos resumido e prático.
+        - O nível deve ser exatamente um dos seguintes:
+          - "iniciante"
+          - "intermediario"
+          - "avancado"
+        - Os tópicos devem ser uma lista de assuntos que devem ser estudados.
+        - Os exercícios devem ser uma lista de atividades práticas para fixação.
+        - O tempo_estimado deve ser uma estimativa clara, como "1 hora", "2 horas" ou "3 horas".
+        - As dicas devem ser curtas e úteis.
+        - Não invente conteúdos que não tenham relação com o assunto identificado.
     
         O plano deve conter:
         - assunto
@@ -68,14 +88,16 @@ class OCR:
         - tempo_estimado
         - dicas
     
-        Responda APENAS em JSON.
+        RETORNE APENAS JSON VÁLIDO.
+        Não utilize Markdown, não utilize blocos de código e não adicione explicações fora do JSON.
     
-        Estrutura:
+        Use EXATAMENTE esta estrutura::
     
         {
           "texto": "",
           "descricao": "",
           "categoria": "",
+          "tags": [],
           "plano_estudos": {
             "assunto": "",
             "nivel": "",
@@ -86,8 +108,15 @@ class OCR:
           }
         }
     
-        Se não for estudo:
-        "plano_estudos": null
+        Quando a categoria não for "Estudo", use:
+
+        {
+          "texto": "",
+          "descricao": "",
+          "categoria": "",
+          "tags": null,
+          "plano_estudos": null
+        }
         """
 
         # Envia imagem e prompt ao Gemini e coleta a resposta
@@ -103,7 +132,7 @@ class OCR:
         )
 
         texto_limpo = self.limpar_json(
-            resposta.text
+            resposta.text or ""
         )
 
         # Converte JSON para um dicinário

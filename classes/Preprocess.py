@@ -58,6 +58,8 @@ class Preprocess:
 
     # Função que gerencia o processamento de imagens
     def processar_arquivo(self, arquivo, caminho_imagem):
+        tag_selecionada = None
+
         try:
             # Preprocessa imagem
             imagem_processada = self.preprocessar_imagem(
@@ -78,18 +80,32 @@ class Preprocess:
                 "plano_estudos"
             )
 
+            tags = dados.get(
+                "tags"
+            )
+
             categoria = categoria.strip()
 
+            if categoria == "Estudo":
+                tag_selecionada = self.escolha_tag(tags)
+
             # Criação/Seleção de pastas
+            name = ""
+
+            if tag_selecionada is not None:
+                name = tag_selecionada
+            else:
+                name = categoria
+
             pasta_categoria = os.path.join(
                 self.PASTA_RESULTADOS,
-                categoria
+                name
             )
 
-            pasta_originais = os.path.join(
+            '''pasta_originais = os.path.join(
                 pasta_categoria,
                 "originais"
-            )
+            )'''
 
             pasta_melhoradas = os.path.join(
                 pasta_categoria,
@@ -114,10 +130,10 @@ class Preprocess:
             else:
                 pasta_plano_de_estudos = None
 
-            os.makedirs(
+            '''os.makedirs(
                 pasta_originais,
                 exist_ok=True
-            )
+            )'''
 
             os.makedirs(
                 pasta_melhoradas,
@@ -135,7 +151,7 @@ class Preprocess:
             )
 
             nome_base = (
-                    categoria.lower()
+                    name.lower()
                     + "_"
                     + timestamp
             )
@@ -145,10 +161,10 @@ class Preprocess:
             )[1]
 
             # Caminhos finais
-            imagem_original_destino = os.path.join(
+            '''imagem_original_destino = os.path.join(
                 pasta_originais,
                 nome_base + extensao
-            )
+            )'''
 
             imagem_melhorada_destino = os.path.join(
                 pasta_melhoradas,
@@ -169,10 +185,10 @@ class Preprocess:
                 plano_de_estudos_destino = None
 
             # Copia imagem original
-            shutil.copy2(
+            '''shutil.copy2(
                 caminho_imagem,
                 imagem_original_destino
-            )
+            )'''
 
             # Copia imagem preprocessada
             shutil.copy2(
@@ -208,26 +224,14 @@ class Preprocess:
                         )
                     )
 
-            print(
-                f"Categoria: {categoria}"
-            )
-
-            print(
-                f"Original: {imagem_original_destino[2:]}"
-            )
-
-            print(
-                f"Melhorada: {imagem_melhorada_destino[2:]}"
-            )
-
-            print(
-                f"JSON: {json_destino[2:]}"
-            )
+            print(f"\nCategoria: {categoria}")
+            if tag_selecionada : print(f"Tag: {tag_selecionada}")
+            #print(f"Original: {imagem_original_destino[2:]}")
+            print(f"Melhorada: {imagem_melhorada_destino[2:]}")
+            print(f"JSON: {json_destino[2:]}")
 
             if plano_de_estudos_destino is not None:
-                print(
-                    f"Plano de estudos: {plano_de_estudos_destino[2:]}"
-                )
+                print(f"Plano de estudos: {plano_de_estudos_destino[2:]}")
 
             os.remove(imagem_processada)
 
@@ -297,3 +301,25 @@ class Preprocess:
         )
 
         return saida
+
+    def escolha_tag(self, tags):
+        tag_selecionada = None
+        print("\nEscolha uma tag para salvar a imagem (Digite o número de 1 a 4):")
+
+        if tags is not None:
+            for i in range(len(tags)):
+                print(f"[{i + 1}] {tags[i]}")
+
+        while True:
+            try:
+                escolha = int(input())
+
+                if 1 <= escolha <= len(tags):
+                    tag_selecionada = tags[escolha - 1]
+                    break
+
+                print("\nOpção inválida. Tente novamente:")
+            except:
+                print("\nOpção inválida. Tente novamente:")
+
+        return tag_selecionada
