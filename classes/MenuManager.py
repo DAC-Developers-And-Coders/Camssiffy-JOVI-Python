@@ -2,6 +2,7 @@ import os, sys, time
 
 from classes.Preprocess import Preprocess
 from classes.TagManager import TagManager
+from classes.Armazenamento.ArmazenamentoLocal import ArmazenamentoLocal
 
 class MenuManager:
     PASTA_IMAGENS = "./imagens_iniciais"
@@ -16,7 +17,7 @@ class MenuManager:
         self.menu_string = ""
         self.default_tag = ""
 
-        self.preprocess = Preprocess()
+        self.preprocess = Preprocess(ArmazenamentoLocal())
         self.tag_manager = TagManager()
         self.iniciar_menu_inicial()
 
