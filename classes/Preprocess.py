@@ -19,32 +19,32 @@ class Preprocess:
         self.ocr = OCR()
 
     # Função que inicia o processamento de uma imagem específica do diretório
-    def iniciar_processamento_unico(self, nome_arquivo, PASTA_IMAGENS):
+    def iniciar_processamento_unico(self, nome_arquivo, pasta_imagens, tag_selecionada=None, tag_manager=None):
         print("Sistema iniciado\nUse CTRL+C para interromper\n")
 
         caminho_imagem = os.path.join(
-            PASTA_IMAGENS,
+            pasta_imagens,
             nome_arquivo
         )
 
         if not os.path.isfile(caminho_imagem):
             print("Arquivo Não Encontrado")
-            for _ in range(30):
+            for _ in range(20):
                 time.sleep(0.1)
             return
 
         print(f"\nProcessando: {nome_arquivo}")
-        self.processar_arquivo(nome_arquivo, caminho_imagem)
+        self.processar_arquivo(nome_arquivo, caminho_imagem, tag_selecionada, tag_manager)
 
         print("\nProcessamento finalizado")
 
     # Função que inicia o processamento de todas as imagens do diretório
-    def iniciar_processamento_geral(self, PASTA_IMAGENS):
+    def iniciar_processamento_geral(self, pasta_imagens, tag_selecionada=None, tag_manager=None):
         print("Sistema iniciado\nUse CTRL+C para encerrar\n")
 
-        for arquivo in os.listdir(PASTA_IMAGENS):
+        for arquivo in os.listdir(pasta_imagens):
             caminho_imagem = os.path.join(
-                PASTA_IMAGENS,
+                pasta_imagens,
                 arquivo
             )
 
@@ -52,14 +52,12 @@ class Preprocess:
                 continue
 
             print(f"\nProcessando: {arquivo}")
-            self.processar_arquivo(arquivo, caminho_imagem)
+            self.processar_arquivo(arquivo, caminho_imagem, tag_selecionada, tag_manager)
 
         print("\nProcessamento finalizado")
 
     # Função que gerencia o processamento de imagens
-    def processar_arquivo(self, arquivo, caminho_imagem):
-        tag_selecionada = None
-
+    def processar_arquivo(self, arquivo, caminho_imagem, tag_selecionada, tag_manager=None):
         try:
             # Preprocessa imagem
             imagem_processada = self.preprocessar_imagem(
@@ -86,16 +84,11 @@ class Preprocess:
 
             categoria = categoria.strip()
 
-            if categoria == "Estudo":
+            if categoria == "Estudo" and tag_selecionada is None:
                 tag_selecionada = self.escolha_tag(tags)
 
             # Criação/Seleção de pastas
-            name = ""
-
-            if tag_selecionada is not None:
-                name = tag_selecionada
-            else:
-                name = categoria
+            name = tag_selecionada if tag_selecionada is not None else categoria
 
             pasta_categoria = os.path.join(
                 self.PASTA_RESULTADOS,
@@ -146,9 +139,9 @@ class Preprocess:
                     + timestamp
             )
 
-            extensao = os.path.splitext(
+            extensao = str(os.path.splitext(
                 arquivo
-            )[1]
+            )[1])
 
             # Caminhos finais
             imagem_original_destino = None
@@ -191,9 +184,10 @@ class Preprocess:
                     indent=4
                 )
 
-            if plano_de_estudos_destino is not None:
+            destino = plano_de_estudos_destino
+            if destino is not None:
                 with open(
-                        plano_de_estudos_destino,
+                        destino,
                         "w",
                         encoding="utf-8"
                 ) as f:
@@ -238,6 +232,14 @@ class Preprocess:
 
             os.remove(imagem_processada)
 
+            if tag_manager and tag_selecionada:
+                tag_manager.adicionar_tag(tag_selecionada)
+
+                if tag_manager.ultima_tag != tag_selecionada:
+                    tag_manager.ultima_tag = tag_selecionada
+
+                tag_manager.salvar_tags()
+
             for _ in range(50):
                 time.sleep(0.1)
         # Envia a interrupção pelo CTRL + C
@@ -248,7 +250,7 @@ class Preprocess:
 
     def preprocessar_imagem(self, caminho):
         imagem = cv2.imread(caminho)
-
+        
         # Aumenta resolução
         imagem = cv2.resize(
             imagem,
@@ -305,8 +307,8 @@ class Preprocess:
 
         return saida
 
-    def escolha_tag(self, tags):
-        tag_selecionada = None
+    @staticmethod
+    def escolha_tag(tags):
         print("\nEscolha uma tag para salvar a imagem (Digite o número de 1 a 4):")
 
         if tags is not None:
@@ -319,7 +321,7 @@ class Preprocess:
             try:
                 escolha = int(input())
 
-                if 1 <= escolha <= len(tags):
+                if tags is not None and 1 <= escolha <= len(tags):
                     tag_selecionada = tags[escolha - 1]
                     break
                 elif escolha == 0:
@@ -329,7 +331,7 @@ class Preprocess:
                     break
 
                 print("\nOpção inválida. Tente novamente:")
-            except:
+            except ValueError:
                 print("\nOpção inválida. Tente novamente:")
 
         return tag_selecionada
