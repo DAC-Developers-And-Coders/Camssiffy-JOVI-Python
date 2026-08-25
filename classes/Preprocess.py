@@ -3,6 +3,7 @@ import os, cv2, time
 
 from classes.OCR import OCR
 from classes.Armazenamento.ArmazenamentoBase import ArmazenamentoBase
+from classes.Armazenamento.ArmazenamentoDrive import ArmazenamentoDrive
 
 class Preprocess:
     PASTA_TEMP = "temp"
@@ -13,8 +14,11 @@ class Preprocess:
             exist_ok=True
         )
 
+        self.armazenamentos = []
+        self.erros = []
+
         self.ocr = OCR()
-        self.armazenamento = armazenamento
+        self.armazenamentos.append(armazenamento)
 
     # Função que inicia o processamento de uma imagem específica do diretório
     def iniciar_processamento_unico(self, nome_arquivo, pasta_imagens, tag_selecionada=None, tag_manager=None):
@@ -35,6 +39,18 @@ class Preprocess:
         self.processar_arquivo(nome_arquivo, caminho_imagem, tag_selecionada, tag_manager)
 
         print("\nProcessamento finalizado")
+
+        if self.erros:
+            print("\n========== ERROS ==========")
+
+            for erro in self.erros:
+                print(f"\nArquivo: {erro['arquivo']}")
+                print(f"Erro: {erro['erro']}")
+
+            print("\n============================")
+
+        str_print = "Pressione ENTER para finalizar."
+        input(str_print)
 
     # Função que inicia o processamento de todas as imagens do diretório
     def iniciar_processamento_geral(self, pasta_imagens, tag_selecionada=None, tag_manager=None):
@@ -77,8 +93,16 @@ class Preprocess:
             if categoria == "Estudo" and tag_selecionada is None:
                 tag_selecionada = self.escolha_tag(tags)
 
+            print("\nArmazenamento iniciado.\n")
+
             # Criação/Seleção de pastas
-            self.armazenamento.salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+            if len(self.armazenamentos) > 1:
+                self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+
+                print("\nArmazenando no Google Drive...")
+                self.armazenamentos[1].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+            else:
+                self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
 
             os.remove(imagem_processada)
 
@@ -96,7 +120,10 @@ class Preprocess:
         except KeyboardInterrupt:
             raise
         except Exception as erro:
-            print(f"Erro: {erro}")
+            self.erros.append({
+                "arquivo": arquivo,
+                "erro": str(erro)
+            })
 
     def preprocessar_imagem(self, caminho):
         imagem = cv2.imread(caminho)
@@ -185,3 +212,6 @@ class Preprocess:
                 print("\nOpção inválida. Tente novamente:")
 
         return tag_selecionada
+
+    def selecionar_armazenamento(self, armazenamentos):
+        self.armazenamentos = armazenamentos

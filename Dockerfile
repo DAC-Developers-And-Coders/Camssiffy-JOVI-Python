@@ -17,6 +17,10 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir \
     google-genai \
+    google-api-python-client \
+    google-auth \
+    google-auth-oauthlib \
+    google-auth-httplib2 \
     opencv-python-headless \
     pillow \
     numpy \

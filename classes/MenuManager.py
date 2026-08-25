@@ -2,7 +2,9 @@ import os, sys, time
 
 from classes.Preprocess import Preprocess
 from classes.TagManager import TagManager
+from classes.Autenticacao.GoogleAuth import GoogleAuth
 from classes.Armazenamento.ArmazenamentoLocal import ArmazenamentoLocal
+from classes.Armazenamento.ArmazenamentoDrive import ArmazenamentoDrive
 
 class MenuManager:
     PASTA_IMAGENS = "./imagens_iniciais"
@@ -25,7 +27,7 @@ class MenuManager:
         self.menu_string = ("\n=== CAMSSIFY & JOVI - Sistema de melhoria, identificação e organização de fotos ==="
                        f"\n| TAG ATIVA: {self.default_tag}\n|"
                        "\n| [1] - Tutorial inicial de uso"
-                       "\n| [2] - Selecionar modo de salvamento"
+                       "\n| [2] - Selecionar modo de armazenamento"
                        "\n| [3] - Utilizar última tag"
                        "\n| [4] - Criar nova tag"
                        "\n| [5] - Deletar uma tag"
@@ -38,7 +40,7 @@ class MenuManager:
         self.limpar_terminal()
         print("================ TUTORIAL ================"
               "\n| [1] - Tutorial inicial de uso - - - > PERMITE INICIAR O TUTORIAL"
-              "\n| [2] - Selecionar modo de salvamento - - - > PERMITE SELECIONAR ENTRE SALVAR NA NUVEM, LOCALMENTE OU EM AMBOS"
+              "\n| [2] - Selecionar modo de armazenamento - - - > PERMITE SELECIONAR ENTRE SALVAR NA NUVEM, LOCALMENTE OU EM AMBOS"
               "\n| [3] - Utilizar última tag - - - > PERMITE SELECIONAR ÚLTIMA TAG UTILIZADA COMO TAG ATIVA"
               "\n| [4] - Criar nova tag - - - > PERMITE CRIAR UMA NOVA TAG"
               "\n| [5] - Deletar uma tag - - - > PERMITE DELETAR UMA TAG CRIADA ANTERIORMENTE"
@@ -51,6 +53,14 @@ class MenuManager:
 
         print("=============== TUTORIAL ================\n"
               "===[2] - Selecionar modo de salvamento===\n")
+
+        print("=============== MÉTODOS DE ARMAZENAMENTO ==============\n"
+              "| [1] - Salvar localmente (pasta 'resultados') - - - > OPÇÃO DE SALVAR FOTOS E PLANOS DE ESTUDOS LOCALMENTE\n"
+              "| [2] - Salvar na nuvem (Google Drive) - - - > OPÇÃO DE SALVAR FOTOS E PLANOS DE ESTUDOS NO GOOGLE DRIVE\n"
+              "| [3] - Salvar em ambos (pasta 'resultados' e Google Drive) - - - > OPÇÃO DE SALVAR LOCALMENTE E NO GOOGLE DRIVE\n"
+              "== Digite qualquer coisa para voltar ao menu inicial ==\n"
+              "\nDigite o número da opção desejada: 3 - - - > Digite aqui o número da opção de armazenamento desejada.\n"
+              "Métodos de armazenamento definidos: LOCAL e NUVEM\n")
 
         self.proximo_passo()
 
@@ -164,6 +174,10 @@ class MenuManager:
                 case 1:
                     self.iniciar_tutorial()
                     continue
+                case 2:
+                    self.selecionar_metodos_salvamento()
+                    self.limpar_terminal()
+                    continue
                 case 3:
                     self.pegar_ultima_tag()
                     self.limpar_terminal()
@@ -202,6 +216,36 @@ class MenuManager:
                     print("Opção inválida. Tente novamente.")
                     self.limpar_terminal()
                     continue
+
+    def selecionar_metodos_salvamento(self):
+        self.limpar_terminal()
+
+        print("=============== MÉTODOS DE ARMAZENAMENTO ==============\n"
+              "| [1] - Salvar localmente (pasta 'resultados')\n"
+              "| [2] - Salvar na nuvem (Google Drive)\n"
+              "| [3] - Salvar em ambos (pasta 'resultados' e Google Drive)\n"
+              "== Digite qualquer coisa para voltar ao menu inicial ==\n")
+
+        opcao = int(input("Digite o número da opção desejada: "))
+
+        match opcao:
+            case 1:
+                local = ArmazenamentoLocal()
+                self.preprocess.selecionar_armazenamento([local])
+                print("Método de armazenamento definido: LOCAL\n")
+            case 2:
+                drive = ArmazenamentoDrive()
+                self.preprocess.selecionar_armazenamento([drive])
+                print("Método de armazenamento definido: NUVEM\n")
+            case 3:
+                local = ArmazenamentoLocal()
+                drive = ArmazenamentoDrive()
+                self.preprocess.selecionar_armazenamento([local, drive])
+                print("Métodos de armazenamento definidos: LOCAL e NUVEM\n")
+            case _:
+                print("O método de armazenamento não foi alterado.\n")
+
+        input("Pressione ENTER para continuar...")
 
     def deletar_tag(self):
         self.limpar_terminal()

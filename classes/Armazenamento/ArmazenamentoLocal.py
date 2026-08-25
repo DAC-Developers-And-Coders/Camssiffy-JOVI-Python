@@ -8,11 +8,11 @@ class ArmazenamentoLocal(ArmazenamentoBase):
 
     def salvar(self, categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos):
         # Criação/Seleção de pastas
-        name = tag_selecionada if tag_selecionada is not None else categoria
+        nome = tag_selecionada if tag_selecionada is not None else categoria
 
         pasta_categoria = os.path.join(
             self.PASTA_RESULTADOS,
-            name
+            nome
         )
 
         pasta_melhoradas = os.path.join(
@@ -48,20 +48,11 @@ class ArmazenamentoLocal(ArmazenamentoBase):
             exist_ok=True
         )
 
-        # Timestamp
-        timestamp = datetime.now().strftime(
-            "%Y%m%d_%H%M%S"
-        )
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S%f")
 
-        nome_base = (
-                name.lower()
-                + "_"
-                + timestamp
-        )
+        nome_base = (nome.lower() + "_" + timestamp)
 
-        extensao = str(os.path.splitext(
-            arquivo
-        )[1])
+        extensao = str(os.path.splitext(arquivo)[1])
 
         # Caminhos finais
         imagem_original_destino = None
@@ -76,7 +67,7 @@ class ArmazenamentoLocal(ArmazenamentoBase):
             nome_base + ".json"
         )
 
-        if pasta_plano_de_estudos is not None:
+        if pasta_plano_de_estudos:
             plano_de_estudos_destino = os.path.join(
                 pasta_plano_de_estudos,
                 nome_base + ".txt"
@@ -106,11 +97,7 @@ class ArmazenamentoLocal(ArmazenamentoBase):
 
         destino = plano_de_estudos_destino
         if destino is not None:
-            with open(
-                    destino,
-                    "w",
-                    encoding="utf-8"
-            ) as f:
+            with open(destino,"w", encoding="utf-8") as f:
                 f.write(
                     json.dumps(
                         plano_de_estudos,
