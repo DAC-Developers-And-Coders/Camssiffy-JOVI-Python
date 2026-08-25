@@ -24,8 +24,7 @@ RUN pip install --upgrade pip && \
     opencv-python-headless \
     pillow \
     numpy \
-    python-dotenv \
-    keyboard
+    python-dotenv
 
 COPY . .
 

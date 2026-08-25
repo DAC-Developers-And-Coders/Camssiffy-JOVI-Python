@@ -2,7 +2,6 @@ import os, sys, time
 
 from classes.Preprocess import Preprocess
 from classes.TagManager import TagManager
-from classes.Autenticacao.GoogleAuth import GoogleAuth
 from classes.Armazenamento.ArmazenamentoLocal import ArmazenamentoLocal
 from classes.Armazenamento.ArmazenamentoDrive import ArmazenamentoDrive
 
@@ -151,7 +150,6 @@ class MenuManager:
         self.limpar_terminal()
 
     def iniciar_menu_inicial(self):
-        #Checa se o sistema foi encerrado pelo comando CTRL+C
         try:
             self.menu_inicial()
         except KeyboardInterrupt:

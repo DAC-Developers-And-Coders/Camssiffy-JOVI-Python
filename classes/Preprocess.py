@@ -3,7 +3,6 @@ import os, cv2, time
 
 from classes.OCR import OCR
 from classes.Armazenamento.ArmazenamentoBase import ArmazenamentoBase
-from classes.Armazenamento.ArmazenamentoDrive import ArmazenamentoDrive
 
 class Preprocess:
     PASTA_TEMP = "temp"
@@ -20,7 +19,6 @@ class Preprocess:
         self.ocr = OCR()
         self.armazenamentos.append(armazenamento)
 
-    # Função que inicia o processamento de uma imagem específica do diretório
     def iniciar_processamento_unico(self, nome_arquivo, pasta_imagens, tag_selecionada=None, tag_manager=None):
         print("Sistema iniciado\nUse CTRL+C para interromper\n")
 
@@ -52,7 +50,6 @@ class Preprocess:
         str_print = "Pressione ENTER para finalizar."
         input(str_print)
 
-    # Função que inicia o processamento de todas as imagens do diretório
     def iniciar_processamento_geral(self, pasta_imagens, tag_selecionada=None, tag_manager=None):
         print("Sistema iniciado\nUse CTRL+C para encerrar\n")
 
@@ -70,13 +67,10 @@ class Preprocess:
 
         print("\nProcessamento finalizado")
 
-    # Função que gerencia o processamento de imagens
     def processar_arquivo(self, arquivo, caminho_imagem, tag_selecionada, tag_manager=None):
         try:
-            # Preprocessa imagem
             imagem_processada = self.preprocessar_imagem(caminho_imagem)
 
-            # Analisa imagem
             dados = self.ocr.analisar_imagem(imagem_processada)
 
             categoria = dados.get(
@@ -95,7 +89,6 @@ class Preprocess:
 
             print("\nArmazenamento iniciado.\n")
 
-            # Criação/Seleção de pastas
             if len(self.armazenamentos) > 1:
                 self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
 
@@ -116,7 +109,7 @@ class Preprocess:
 
             for _ in range(50):
                 time.sleep(0.1)
-        # Envia a interrupção pelo CTRL + C
+
         except KeyboardInterrupt:
             raise
         except Exception as erro:
@@ -127,7 +120,7 @@ class Preprocess:
 
     def preprocessar_imagem(self, caminho):
         imagem = cv2.imread(caminho)
-        
+
         # Aumenta resolução
         imagem = cv2.resize(
             imagem,

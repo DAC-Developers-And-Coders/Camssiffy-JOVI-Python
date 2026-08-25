@@ -7,7 +7,6 @@ class ArmazenamentoLocal(ArmazenamentoBase):
     PASTA_RESULTADOS = "./resultados"
 
     def salvar(self, categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos):
-        # Criação/Seleção de pastas
         nome = tag_selecionada if tag_selecionada is not None else categoria
 
         pasta_categoria = os.path.join(
@@ -54,7 +53,6 @@ class ArmazenamentoLocal(ArmazenamentoBase):
 
         extensao = str(os.path.splitext(arquivo)[1])
 
-        # Caminhos finais
         imagem_original_destino = None
 
         imagem_melhorada_destino = os.path.join(
@@ -75,13 +73,11 @@ class ArmazenamentoLocal(ArmazenamentoBase):
         else:
             plano_de_estudos_destino = None
 
-        # Copia imagem preprocessada
         shutil.copy2(
             imagem_processada,
             imagem_melhorada_destino
         )
 
-        # Salva JSON
         with open(
                 json_destino,
                 "w",
@@ -106,7 +102,6 @@ class ArmazenamentoLocal(ArmazenamentoBase):
                     )
                 )
 
-        # Salva imagem original, se não for de estudos
         if categoria != "Estudo":
             pasta_originais = os.path.join(
                 pasta_categoria,
