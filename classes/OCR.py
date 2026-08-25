@@ -9,17 +9,14 @@ class OCR:
     client = None
 
     def __init__(self):
-        # Carrega as variáveis de ambiente
         load_dotenv()
 
-        # Cria o cliente Gemini utilizando a chave da API armazenada no .env
         self.client = genai.Client(
             api_key=os.getenv(
                 "GEMINI_API_KEY"
             )
         )
 
-    # Função responsável por limpar retorno feito pela IA
     @staticmethod
     def limpar_json(texto):
 
@@ -33,12 +30,10 @@ class OCR:
 
         return texto
 
-    # Função responsável por analisar imagens
     def analisar_imagem(self, path):
 
         imagem = Image.open(path)
 
-        # Define o prompt enviado para o Gemini
         prompt = """
         Analise cuidadosamente a imagem fornecida.
     
@@ -119,7 +114,6 @@ class OCR:
         }
         """
 
-        # Envia imagem e prompt ao Gemini e coleta a resposta
         resposta = self.client.models.generate_content(
             model="gemini-2.5-flash",
             contents=[
@@ -135,7 +129,6 @@ class OCR:
             resposta.text or ""
         )
 
-        # Converte JSON para um dicinário
         dados = json.loads(
             texto_limpo
         )

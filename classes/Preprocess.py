@@ -121,7 +121,6 @@ class Preprocess:
     def preprocessar_imagem(self, caminho):
         imagem = cv2.imread(caminho)
 
-        # Aumenta resolução
         imagem = cv2.resize(
             imagem,
             None,
@@ -130,7 +129,6 @@ class Preprocess:
             interpolation=cv2.INTER_CUBIC
         )
 
-        # Redução leve de ruído
         imagem = cv2.fastNlMeansDenoisingColored(
             imagem,
             None,
@@ -140,7 +138,6 @@ class Preprocess:
             21
         )
 
-        # Brilho e contraste
         alpha = 1.15
         beta = 8
 
@@ -150,7 +147,6 @@ class Preprocess:
             beta=beta
         )
 
-        # Nitidez
         kernel = np.array([
             [0, -1, 0],
             [-1, 5, -1],
