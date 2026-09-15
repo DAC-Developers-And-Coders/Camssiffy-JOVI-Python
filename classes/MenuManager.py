@@ -2,6 +2,8 @@ import os, sys, time
 
 from classes.Preprocess import Preprocess
 from classes.TagManager import TagManager
+from classes.Camera import Camera
+
 from classes.Armazenamento.ArmazenamentoLocal import ArmazenamentoLocal
 from classes.Armazenamento.ArmazenamentoDrive import ArmazenamentoDrive
 
@@ -20,6 +22,7 @@ class MenuManager:
 
         self.preprocess = Preprocess(ArmazenamentoLocal())
         self.tag_manager = TagManager()
+        self.camera = Camera()
         self.iniciar_menu_inicial()
 
     def atualiza_menu_string(self):
@@ -33,7 +36,8 @@ class MenuManager:
                        "\n| [6] - Selecionar TAG ATIVA para múltiplas fotos"
                        f"\n| [7] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}"
                        "\n| [8] - Iniciar processamento de imagem específica"
-                       "\n| [9] - Sair\n")
+                       "\n| [9] - Abrir Câmera"
+                       "\n| [0] - Sair\n")
 
     def iniciar_tutorial(self):
         self.limpar_terminal()
@@ -207,6 +211,11 @@ class MenuManager:
                     continue
                 case 9:
                     self.limpar_terminal()
+                    self.camera.abrir_camera()
+                    self.limpar_terminal()
+                    continue
+                case 0:
+                    self.limpar_terminal()
                     print("Sistema encerrado.")
                     sys.stdout.flush()
                     self.encerrar_sistema()
@@ -373,6 +382,9 @@ class MenuManager:
         self.limpar_terminal()
 
     def encerrar_sistema(self):
+        if self.camera.verficar_camera():
+            self.camera.fechar_camera()
+
         if self.default_tag:
             self.tag_manager.ultima_tag = self.default_tag
 
