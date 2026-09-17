@@ -11,7 +11,11 @@ class ArmazenamentoDrive(ArmazenamentoBase):
     NOME_PASTA = "Camssify"
 
     def __init__(self):
-        creds = GoogleAuth.autenticar()
+        try:
+            creds = GoogleAuth.autenticar()
+        except Exception as e:
+            raise e
+
         self.drive = build('drive', 'v3', credentials=creds)
 
         self.pasta_id = self.obter_ou_criar_pasta(self.NOME_PASTA)

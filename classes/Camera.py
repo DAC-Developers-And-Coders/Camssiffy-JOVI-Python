@@ -2,7 +2,7 @@ import os
 import cv2
 
 IMAGENS_INICIAIS_PATH = "./imagens_iniciais"
-NOME_ARQUIVO_DEFAULT = "foto.png"
+NOME_ARQUIVO_DEFAULT = "foto"
 
 class Camera:
     def __init__(self):
@@ -27,7 +27,7 @@ class Camera:
             if cv2.waitKey(1) == ord('c'):
                 cv2.imshow('Foto', frame)
 
-                if os.path.isfile(os.path.join(IMAGENS_INICIAIS_PATH, NOME_ARQUIVO_DEFAULT)):
+                if os.path.isfile(os.path.join(IMAGENS_INICIAIS_PATH, f'{NOME_ARQUIVO_DEFAULT}.png')):
                     file_count = len([f for f in os.listdir(IMAGENS_INICIAIS_PATH) if f.endswith('.png') and
                                       os.path.isfile(os.path.join(IMAGENS_INICIAIS_PATH, f))])
 

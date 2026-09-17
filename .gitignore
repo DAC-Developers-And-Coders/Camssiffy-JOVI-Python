@@ -1,6 +1,9 @@
 .env
 __pycache__/
 venv/
+data/
+resultados/
+temp/
 credentials.json
 token.json
 *.pyc

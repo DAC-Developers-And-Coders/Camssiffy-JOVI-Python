@@ -13,6 +13,9 @@ class GoogleAuth:
     def autenticar(cls):
         creds = None
 
+        if not os.path.isfile(os.path.join(os.getcwd(), cls.ARQUIVO_CREDENCIAIS)):
+            raise Exception("\nArquivo credentials.json não encontrado.")
+
         if os.path.exists(cls.ARQUIVO_TOKEN):
             creds = Credentials.from_authorized_user_file(cls.ARQUIVO_TOKEN, cls.SCOPES)
 

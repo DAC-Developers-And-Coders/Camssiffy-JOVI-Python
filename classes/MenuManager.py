@@ -233,26 +233,43 @@ class MenuManager:
               "| [3] - Salvar em ambos (pasta 'resultados' e Google Drive)\n"
               "== Digite qualquer coisa para voltar ao menu inicial ==\n")
 
-        opcao = int(input("Digite o número da opção desejada: "))
+        opcao = input("Digite o número da opção desejada: ")
 
-        match opcao:
-            case 1:
-                local = ArmazenamentoLocal()
-                self.preprocess.selecionar_armazenamento([local])
-                print("Método de armazenamento definido: LOCAL\n")
-            case 2:
-                drive = ArmazenamentoDrive()
-                self.preprocess.selecionar_armazenamento([drive])
-                print("Método de armazenamento definido: NUVEM\n")
-            case 3:
-                local = ArmazenamentoLocal()
-                drive = ArmazenamentoDrive()
-                self.preprocess.selecionar_armazenamento([local, drive])
-                print("Métodos de armazenamento definidos: LOCAL e NUVEM\n")
-            case _:
-                print("O método de armazenamento não foi alterado.\n")
+        if not opcao.isnumeric():
+            print("\nO método de armazenamento não foi alterado.\n")
+        else:
+            match int(opcao):
+                case 1:
+                    local = ArmazenamentoLocal()
+                    self.preprocess.selecionar_armazenamento([local])
+                    print("\nMétodo de armazenamento definido: LOCAL\n")
+                case 2:
+                    drive = self.testa_drive()
+
+                    if drive is not None:
+                        self.preprocess.selecionar_armazenamento([drive])
+                        print("\nMétodo de armazenamento definido: NUVEM\n")
+                case 3:
+                    local = ArmazenamentoLocal()
+                    drive = self.testa_drive()
+
+                    if drive is not None:
+                        self.preprocess.selecionar_armazenamento([local, drive])
+                        print("\nMétodos de armazenamento definidos: LOCAL e NUVEM\n")
+                case _:
+                    print("\nO método de armazenamento não foi alterado.\n")
 
         input("Pressione ENTER para continuar...")
+
+    @staticmethod
+    def testa_drive():
+        try:
+            drive = ArmazenamentoDrive()
+        except Exception as e:
+            drive = None
+            print(f"\nErro ao autenticar: {e}\n")
+
+        return drive
 
     def deletar_tag(self):
         self.limpar_terminal()
