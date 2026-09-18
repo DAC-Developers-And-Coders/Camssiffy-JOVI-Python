@@ -1,6 +1,7 @@
 import numpy as np
 import os, cv2, time
 
+from tqdm import tqdm
 from classes.OCR import OCR
 from classes.Armazenamento.ArmazenamentoBase import ArmazenamentoBase
 
@@ -69,9 +70,16 @@ class Preprocess:
 
     def processar_arquivo(self, arquivo, caminho_imagem, tag_selecionada, tag_manager=None):
         try:
-            imagem_processada = self.preprocessar_imagem(caminho_imagem)
+            with tqdm(total=2, desc=f'Identificação {arquivo}', colour='#0080ff') as barra:
+                imagem_processada = self.preprocessar_imagem(caminho_imagem)
 
-            dados = self.ocr.analisar_imagem(imagem_processada)
+                barra.set_postfix_str("Pré-processamento concluído")
+                barra.update(1)
+
+                dados = self.ocr.analisar_imagem(imagem_processada)
+
+                barra.set_postfix_str("OCR concluído")
+                barra.update(1)
 
             categoria = dados.get(
                 "categoria",
@@ -87,15 +95,30 @@ class Preprocess:
             if categoria == "Estudo" and tag_selecionada is None:
                 tag_selecionada = self.escolha_tag(tags)
 
-            print("\nArmazenamento iniciado.\n")
+            print("\n")
 
-            if len(self.armazenamentos) > 1:
-                self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+            total = 2 if len(self.armazenamentos) > 1 else 1
 
-                print("\nArmazenando no Google Drive...")
-                self.armazenamentos[1].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
-            else:
-                self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+            with tqdm(total=total, desc=f'Armazenamento {arquivo}', colour='#0080ff') as barra:
+                if len(self.armazenamentos) > 1:
+                    self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+
+                    tqdm.write("\n")
+
+                    barra.update(1)
+                    barra.set_postfix_str("Armazenamento local concluído")
+
+                    self.armazenamentos[1].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+
+                    tqdm.write("\n")
+
+                    barra.update(1)
+                    barra.set_postfix_str("Armazenamento na nuvem concluído")
+                else:
+                    self.armazenamentos[0].salvar(categoria, tag_selecionada, arquivo, imagem_processada, caminho_imagem, dados, plano_de_estudos)
+
+                    barra.set_postfix_str("Armazenamento concluído")
+                    barra.update(1)
 
             os.remove(imagem_processada)
 
@@ -106,9 +129,6 @@ class Preprocess:
                     tag_manager.ultima_tag = tag_selecionada
 
                 tag_manager.salvar_tags()
-
-            for _ in range(50):
-                time.sleep(0.1)
 
         except KeyboardInterrupt:
             raise

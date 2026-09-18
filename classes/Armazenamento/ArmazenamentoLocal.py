@@ -1,4 +1,6 @@
 import os, json, shutil
+
+from tqdm import tqdm
 from datetime import datetime
 
 from classes.Armazenamento.ArmazenamentoBase import ArmazenamentoBase
@@ -123,11 +125,11 @@ class ArmazenamentoLocal(ArmazenamentoBase):
                 imagem_original_destino
             )
 
-        print(f"\nCategoria: {categoria}")
-        if tag_selecionada: print(f"Tag: {tag_selecionada}")
-        if imagem_original_destino: print(f"Original: {imagem_original_destino[2:]}")
-        print(f"Melhorada: {imagem_melhorada_destino[2:]}")
-        print(f"JSON: {json_destino[2:]}")
+        tqdm.write(f"\nCategoria: {categoria}")
+        if tag_selecionada: tqdm.write(f"Tag: {tag_selecionada}")
+        if imagem_original_destino: tqdm.write(f"Original: {imagem_original_destino[2:]}")
+        tqdm.write(f"Melhorada: {imagem_melhorada_destino[2:]}")
+        tqdm.write(f"JSON: {json_destino[2:]}")
 
         if plano_de_estudos_destino is not None:
-            print(f"Plano de estudos: {plano_de_estudos_destino[2:]}")
+            tqdm.write(f"Plano de estudos: {plano_de_estudos_destino[2:]}")
