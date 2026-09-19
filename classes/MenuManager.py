@@ -36,9 +36,9 @@ class MenuManager:
                        "\n| [4] - Criar nova tag"
                        "\n| [5] - Deletar uma tag"
                        "\n| [6] - Selecionar TAG ATIVA para múltiplas fotos"
-                       f"\n| [7] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}"
+                       "\n| [7] - Abrir Câmera"
                        "\n| [8] - Iniciar processamento de imagem específica"
-                       "\n| [9] - Abrir Câmera"
+                       f"\n| [9] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}"
                        "\n| [0] - Sair\n")
 
     def iniciar_tutorial(self):
@@ -199,7 +199,7 @@ class MenuManager:
                     self.selecionar_tag_ativa()
                 case 7:
                     self.limpar_terminal()
-                    self.gerenciar_processamento("", False)
+                    self.camera_setup()
                     self.limpar_terminal()
                     continue
                 case 8:
@@ -213,7 +213,7 @@ class MenuManager:
                     continue
                 case 9:
                     self.limpar_terminal()
-                    self.camera_setup()
+                    self.gerenciar_processamento("", False)
                     self.limpar_terminal()
                     continue
                 case 0:
