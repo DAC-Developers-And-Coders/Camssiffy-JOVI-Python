@@ -94,15 +94,11 @@ class ArmazenamentoLocal(ArmazenamentoBase):
             )
 
         destino = plano_de_estudos_destino
-        if destino is not None:
+        if destino is not None and plano_de_estudos is not None:
+            plano_de_estudos_string = self.processar_plano(plano_de_estudos)
+
             with open(destino,"w", encoding="utf-8") as f:
-                f.write(
-                    json.dumps(
-                        plano_de_estudos,
-                        ensure_ascii=False,
-                        indent=4
-                    )
-                )
+                f.write(plano_de_estudos_string)
 
         if categoria != "Estudo":
             pasta_originais = os.path.join(

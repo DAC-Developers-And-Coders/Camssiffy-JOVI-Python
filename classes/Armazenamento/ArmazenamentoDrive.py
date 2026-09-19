@@ -87,7 +87,7 @@ class ArmazenamentoDrive(ArmazenamentoBase):
                 "parents": [pasta_plano_de_estudos]
             }
 
-            conteudo_plano = json.dumps(plano_de_estudos, ensure_ascii=False, indent=4)
+            conteudo_plano = self.processar_plano(plano_de_estudos)
             arquivo_memoria = io.BytesIO(conteudo_plano.encode("utf-8"))
 
             media_plano_de_estudos = MediaIoBaseUpload(arquivo_memoria, mimetype="text/plain", resumable=False)
