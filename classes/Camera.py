@@ -19,7 +19,7 @@ class Camera:
             print("Erro ao abrir a camera")
             return
 
-        print("Câmera aberta com sucesso!\n\nPressione 'q' para sair.\nPressione 'c' para capturar uma imagem.")
+        print("\nCâmera aberta com sucesso!\n\nPressione 'q' para sair.\nPressione 'c' para capturar uma imagem.")
 
         while True:
             ret, frame = self.camera.read()

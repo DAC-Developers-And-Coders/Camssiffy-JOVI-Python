@@ -50,9 +50,10 @@ class MenuManager:
               "\n| [4] - Criar nova tag - - - > PERMITE CRIAR UMA NOVA TAG"
               "\n| [5] - Deletar uma tag - - - > PERMITE DELETAR UMA TAG CRIADA ANTERIORMENTE"
               "\n| [6] - Selecionar TAG ATIVA para múltiplas fotos - - - > PERMITE SELECIONAR UMA TAG COMO ATIVA"
-              f"\n| [7] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]} - - -> PERMITE INICIAR O PROCESSAMENTO DE TODAS AS IMAGENS DA PASTA"
+              "\n| [7] - Abrir Câmera - - -> PERMITE QUE O USUÁRIO SELECIONE A CÂMERA DESEJADA E TIRE FOTOS"
               "\n| [8] - Iniciar processamento de imagem específica - - - > PERMITE INICIAR O PROCESSAMENTO DE UMA IMAGEM ESPECÍFICA"
-              "\n| [9] - Sair - - - > PERMITE SAIR DO SISTEMA\n")
+              f"\n| [9] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]} - - -> PERMITE INICIAR O PROCESSAMENTO DE TODAS AS IMAGENS DA PASTA"
+              "\n| [10] - Sair - - - > PERMITE SAIR DO SISTEMA\n")
 
         self.proximo_passo()
 
@@ -86,7 +87,7 @@ class MenuManager:
               "==========[5] - Deletar uma tag==========\n"
               "\n=== TAGS CRIADAS ==="
               "\n[1] EXEMPLO - - - > Lista de tags criadas anteriormente.\n"
-              "\nEscolha a tag que deseja deletar, pelo número: - - - > Aqui, você deve digitar o número da tag que deseja excluir.\n"
+              "\nEscolha a tag que deseja deletar, pelo número: 1 - - - > Aqui, você deve digitar o número da tag que deseja excluir.\n"
               "\nTag EXEMPLO deletada com sucesso.\n")
 
         self.proximo_passo()
@@ -101,8 +102,33 @@ class MenuManager:
 
         self.proximo_passo()
 
+        print("=============== TUTORIAL ===============\n"
+              "===========[7] - Abrir Câmera===========\n"
+              f"\nCâmeras disponíveis:\n"
+              "[0] - USB CAMERA"
+              "\n[1] - USB CAMERA 2"
+              "\nEscolha uma câmera para capturar a imagem pelo número: 0 - - - > Aqui, você deve digitar o número da câmera que deseja abrir.\n")
+
+        self.proximo_passo()
+
+        print("=============== TUTORIAL ===============\n"
+              "===========[7] - Abrir Câmera===========\n"
+              f"\nCâmera aberta com sucesso!\n"
+              "\nPressione 'q' para sair. - - -> Ao pressionar 'q' na tela da câmera, o sistema retorna ao menu."
+              "\nPressione 'c' para capturar uma imagem. - - -> Ao pressionar 'c' na tela da câmera, uma foto é tirada e armazenada na pasta 'imagens_iniciais' do projeto.\n")
+
+        self.proximo_passo()
+
+        print("====================== TUTORIAL ======================\n"
+              "===[8] - Iniciar processamento de imagem específica===\n"
+              f"\nDigite o nome do arquivo da imagem no formato 'nome_arquivo.extensao' (a imagem deve estar na pasta {self.PASTA_IMAGENS[2:]}):\n"
+              "anotacao.jpeg - - - > Você deve digitar o nome do arquivo desejado aqui.\n"
+              "O PROCESSO SEGUE DA MESMA FORMA DO PROCESSAMENTO GERAL A SEGUIR\n")
+
+        self.proximo_passo()
+
         print("============================ TUTORIAL ===========================\n"
-              f"===[7] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}===\n"
+              f"===[9] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}===\n"
               "===================== SELEÇÃO DE TAG GERADA =====================\n"
               "\nSistema iniciado\nUse CTRL+C para encerrar\n"
               "\nProcessando: nome_arquivo.extensao\n"
@@ -115,7 +141,7 @@ class MenuManager:
         self.proximo_passo()
 
         print("============================ TUTORIAL ===========================\n"
-              f"===[7] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}===\n"
+              f"===[9] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}===\n"
               "===================== SELEÇÃO DE TAG MANUAL =====================\n"
               "\nEscolha uma tag para salvar a imagem (Digite o número de 1 a 4):"
               "\n[1] - EXEMPLO_IA - - - > Lista de tags geradas pela IA."
@@ -127,7 +153,7 @@ class MenuManager:
         self.proximo_passo()
 
         print("============================ TUTORIAL ===========================\n"
-              f"===[7] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}===\n"
+              f"===[9] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]}===\n"
               "======================== RESULTADO FINAL ========================\n"
               "\nCategoria: Estudo\nTag: EXEMPLO_IA (ou MINHA_TAG)"
               "\nMelhorada: resultados\\EXEMPLO_IA (ou MINHA_TAG)\\melhoradas\\exemplo_ia(ou minha_tag)_a/m/d_h:m:s.jpeg"
@@ -136,16 +162,8 @@ class MenuManager:
 
         self.proximo_passo()
 
-        print("====================== TUTORIAL ======================\n"
-              f"===[8] - Iniciar processamento de imagem específica===\n"
-              f"\nDigite o nome do arquivo da imagem no formato 'nome_arquivo.extensao' (a imagem deve estar na pasta {self.PASTA_IMAGENS[2:]}):\n"
-              "anotacao.jpeg - - - > Você deve digitar o nome do arquivo desejado aqui.\n"
-              "O MESMO PROCESSO DO PROCESSAMENTO GERAL\n")
-
-        self.proximo_passo()
-
         print("================ TUTORIAL ================\n"
-              "================[9] - Sair================\n"
+              "================[10] - Sair================\n"
               "\nSistema encerrado. - - - > Encerra o sistema.\n")
 
         self.proximo_passo(True)
