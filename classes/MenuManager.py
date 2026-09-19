@@ -1,5 +1,7 @@
 import os, sys, time
 
+from cv2_enumerate_cameras import enumerate_cameras
+
 from classes.Preprocess import Preprocess
 from classes.TagManager import TagManager
 from classes.Camera import Camera
@@ -211,7 +213,7 @@ class MenuManager:
                     continue
                 case 9:
                     self.limpar_terminal()
-                    self.camera.abrir_camera()
+                    self.camera_setup()
                     self.limpar_terminal()
                     continue
                 case 0:
@@ -223,6 +225,32 @@ class MenuManager:
                     print("Opção inválida. Tente novamente.")
                     self.limpar_terminal()
                     continue
+
+    def camera_setup(self):
+        cameras = enumerate_cameras()
+
+        if not cameras:
+            print("Nenhuma câmera encontrada.")
+            return
+
+        print("Câmeras disponíveis:")
+
+        nomes_cameras = []
+        i = 0
+        for camera in cameras:
+            if camera.name not in nomes_cameras:
+                nomes_cameras.append(camera.name)
+                print(f'| [{i}] - {camera.name}')
+                i += 1
+
+        opcao = input('\nEscolha uma câmera para capturar a imagem pelo número: ')
+
+        if not opcao.isnumeric() or int(opcao) not in range(len(cameras) - 1):
+            print("\nNenhuma câmera selecionada.\n")
+            input("Pressione ENTER para continuar...")
+        else:
+            self.camera.set_camera(int(opcao))
+            self.camera.abrir_camera()
 
     def selecionar_metodos_salvamento(self):
         self.limpar_terminal()

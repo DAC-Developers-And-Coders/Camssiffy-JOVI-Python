@@ -8,6 +8,12 @@ class Camera:
     def __init__(self):
         self.camera = cv2.VideoCapture(0)
 
+    def set_camera(self, index):
+        if self.camera.isOpened():
+            self.camera.release()
+
+        self.camera = cv2.VideoCapture(index)
+
     def abrir_camera(self):
         if not self.camera.isOpened():
             print("Erro ao abrir a camera")
@@ -24,7 +30,9 @@ class Camera:
 
             cv2.imshow('Camera', frame)
 
-            if cv2.waitKey(1) == ord('c'):
+            key = cv2.waitKey(1) & 0xff
+
+            if key == ord('c'):
                 cv2.imshow('Foto', frame)
 
                 if os.path.isfile(os.path.join(IMAGENS_INICIAIS_PATH, f'{NOME_ARQUIVO_DEFAULT}.png')):
@@ -35,8 +43,7 @@ class Camera:
                 else:
                     cv2.imwrite(os.path.join(IMAGENS_INICIAIS_PATH, NOME_ARQUIVO_DEFAULT), frame)
                 print(f"Imagem capturada com sucesso e armazenada em {IMAGENS_INICIAIS_PATH}")
-
-            if cv2.waitKey(1) == ord('q'):
+            elif key == ord('q'):
                 break
 
         cv2.destroyAllWindows()
