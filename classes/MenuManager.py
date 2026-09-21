@@ -2,6 +2,7 @@ import os, sys, time
 
 from cv2_enumerate_cameras import enumerate_cameras
 
+from classes.StorageManager import StorageManager
 from classes.Preprocess import Preprocess
 from classes.TagManager import TagManager
 from classes.Camera import Camera
@@ -23,13 +24,18 @@ class MenuManager:
         self.default_tag = ""
 
         self.preprocess = Preprocess(ArmazenamentoLocal())
+        self.storage_manager = StorageManager()
         self.tag_manager = TagManager()
         self.camera = Camera()
+
+        self.armazenamento_default = self.storage_manager.get_armazenamento_selecionado()
         self.iniciar_menu_inicial()
+
 
     def atualiza_menu_string(self):
         self.menu_string = ("\n=== CAMSSIFY & JOVI - Sistema de melhoria, identificação e organização de fotos ==="
-                       f"\n| TAG ATIVA: {self.default_tag}\n|"
+                       f"\n| TAG ATIVA: {self.default_tag}"
+                       f"\n| MÉTODO DE ARMAZENAMENTO ATIVO: {self.armazenamento_default}\n|"
                        "\n| [1] - Tutorial inicial de uso"
                        "\n| [2] - Selecionar modo de armazenamento"
                        "\n| [3] - Utilizar última tag"
@@ -114,8 +120,9 @@ class MenuManager:
         print("=============== TUTORIAL ===============\n"
               "===========[7] - Abrir Câmera===========\n"
               f"\nCâmera aberta com sucesso!\n"
-              "\nPressione 'q' para sair. - - -> Ao pressionar 'q' na tela da câmera, o sistema retorna ao menu."
-              "\nPressione 'c' para capturar uma imagem. - - -> Ao pressionar 'c' na tela da câmera, uma foto é tirada e armazenada na pasta 'imagens_iniciais' do projeto.\n")
+              "\nPressione 's' para sair. - - -> Ao pressionar 's' na tela da câmera, o sistema retorna ao menu."
+              "\nPressione 'f' para capturar uma imagem. - - -> Ao pressionar 'f' na tela da câmera, uma foto é tirada e armazenada na pasta 'imagens_iniciais' do projeto."
+              "\nPressione 'c' para cortar a última foto tirada. - - -> Ao pressionar 'c' na tela da câmera, o seu editor de fotos padrão é aberto para editar a imagem.\n")
 
         self.proximo_passo()
 
@@ -289,12 +296,16 @@ class MenuManager:
                     local = ArmazenamentoLocal()
                     self.preprocess.selecionar_armazenamento([local])
                     print("\nMétodo de armazenamento definido: LOCAL\n")
+
+                    self.set_armazenamento_default(0)
                 case 2:
                     drive = self.testa_drive()
 
                     if drive is not None:
                         self.preprocess.selecionar_armazenamento([drive])
                         print("\nMétodo de armazenamento definido: NUVEM\n")
+
+                        self.set_armazenamento_default(1)
                 case 3:
                     local = ArmazenamentoLocal()
                     drive = self.testa_drive()
@@ -302,10 +313,18 @@ class MenuManager:
                     if drive is not None:
                         self.preprocess.selecionar_armazenamento([local, drive])
                         print("\nMétodos de armazenamento definidos: LOCAL e NUVEM\n")
+
+                        self.set_armazenamento_default(2)
                 case _:
                     print("\nO método de armazenamento não foi alterado.\n")
 
         input("Pressione ENTER para continuar...")
+
+    def set_armazenamento_default(self, index):
+        self.storage_manager.set_armazenamento_selecionado(index)
+        self.storage_manager.salvar_dados()
+
+        self.armazenamento_default = self.storage_manager.get_armazenamento_selecionado()
 
     @staticmethod
     def testa_drive():
