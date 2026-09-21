@@ -1,5 +1,4 @@
-import os
-import cv2
+import os, cv2, sys, subprocess
 
 IMAGENS_INICIAIS_PATH = "./imagens_iniciais"
 NOME_ARQUIVO_DEFAULT = "foto"
@@ -7,6 +6,7 @@ NOME_ARQUIVO_DEFAULT = "foto"
 class Camera:
     def __init__(self):
         self.camera = cv2.VideoCapture(0)
+        self.ultima_foto = None
 
     def set_camera(self, index):
         if self.camera.isOpened():
@@ -19,7 +19,10 @@ class Camera:
             print("Erro ao abrir a camera")
             return
 
-        print("\nCâmera aberta com sucesso!\n\nPressione 'q' para sair.\nPressione 'c' para capturar uma imagem.")
+        print("\nCâmera aberta com sucesso!\n\nPressione 's' para sair.\nPressione 'f' para tirar uma foto.\nPressione 'c' para cortar a última foto tirada.")
+
+        if self.ultima_foto is not None:
+            self.ultima_foto = None
 
         while True:
             ret, frame = self.camera.read()
@@ -32,21 +35,39 @@ class Camera:
 
             key = cv2.waitKey(1) & 0xff
 
-            if key == ord('c'):
+            if key == ord('f'):
                 cv2.imshow('Foto', frame)
 
                 if os.path.isfile(os.path.join(IMAGENS_INICIAIS_PATH, f'{NOME_ARQUIVO_DEFAULT}.png')):
-                    file_count = len([f for f in os.listdir(IMAGENS_INICIAIS_PATH) if f.endswith('.png') and
+                    contador_arquivos = len([f for f in os.listdir(IMAGENS_INICIAIS_PATH) if f.endswith('.png') and
                                       os.path.isfile(os.path.join(IMAGENS_INICIAIS_PATH, f))])
 
-                    cv2.imwrite(os.path.join(IMAGENS_INICIAIS_PATH, f'{NOME_ARQUIVO_DEFAULT}({file_count}).png'), frame)
+                    arquivo_camera = os.path.join(IMAGENS_INICIAIS_PATH, f'{NOME_ARQUIVO_DEFAULT}({contador_arquivos}).png')
                 else:
-                    cv2.imwrite(os.path.join(IMAGENS_INICIAIS_PATH, NOME_ARQUIVO_DEFAULT), frame)
+                    arquivo_camera = os.path.join(IMAGENS_INICIAIS_PATH, NOME_ARQUIVO_DEFAULT)
+
+                cv2.imwrite(arquivo_camera, frame)
                 print(f"Imagem capturada com sucesso e armazenada em {IMAGENS_INICIAIS_PATH}")
-            elif key == ord('q'):
+
+                self.ultima_foto = arquivo_camera
+            elif key == ord('c'):
+                self.abrir_editor_de_fotos()
+            elif key == ord('s'):
                 break
 
         cv2.destroyAllWindows()
+
+    def abrir_editor_de_fotos(self):
+        if self.ultima_foto is None:
+            print("\nNenhuma foto foi capturada nesta sessão.\n")
+            return
+
+        if sys.platform == 'win32':
+            subprocess.run(['start', self.ultima_foto], shell=True)
+        elif sys.platform == 'darwin':
+            subprocess.run(['open', self.ultima_foto])
+        else:
+            subprocess.run(['xdg-open', self.ultima_foto])
 
     def fechar_camera(self):
         self.camera.release()
