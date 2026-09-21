@@ -29,8 +29,23 @@ class MenuManager:
         self.camera = Camera()
 
         self.armazenamento_default = self.storage_manager.get_armazenamento_selecionado()
+
+        self.gerenciar_armazenamento()
         self.iniciar_menu_inicial()
 
+    def gerenciar_armazenamento(self):
+        match self.armazenamento_default:
+            case "LOCAL":
+                local = ArmazenamentoLocal()
+                self.preprocess.selecionar_armazenamento([local])
+            case "NUVEM":
+                drive = self.testa_drive()
+                self.preprocess.selecionar_armazenamento([drive])
+            case "LOCAL E NUVEM":
+                local = ArmazenamentoLocal()
+                drive = self.testa_drive()
+
+                self.preprocess.selecionar_armazenamento([local, drive])
 
     def atualiza_menu_string(self):
         self.menu_string = ("\n=== CAMSSIFY & JOVI - Sistema de melhoria, identificação e organização de fotos ==="
