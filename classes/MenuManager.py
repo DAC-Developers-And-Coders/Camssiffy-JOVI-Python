@@ -59,7 +59,7 @@ class MenuManager:
               "\n| [7] - Abrir Câmera - - -> PERMITE QUE O USUÁRIO SELECIONE A CÂMERA DESEJADA E TIRE FOTOS"
               "\n| [8] - Iniciar processamento de imagem específica - - - > PERMITE INICIAR O PROCESSAMENTO DE UMA IMAGEM ESPECÍFICA"
               f"\n| [9] - Iniciar processamento geral da pasta {self.PASTA_IMAGENS[2:]} - - -> PERMITE INICIAR O PROCESSAMENTO DE TODAS AS IMAGENS DA PASTA"
-              "\n| [10] - Sair - - - > PERMITE SAIR DO SISTEMA\n")
+              "\n| [0] - Sair - - - > PERMITE SAIR DO SISTEMA\n")
 
         self.proximo_passo()
 
@@ -170,7 +170,7 @@ class MenuManager:
         self.proximo_passo()
 
         print("================ TUTORIAL ================\n"
-              "================[10] - Sair================\n"
+              "================[0] - Sair================\n"
               "\nSistema encerrado. - - - > Encerra o sistema.\n")
 
         self.proximo_passo(True)
